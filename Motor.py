@@ -1,0 +1,43 @@
+#!/usr/bin/python
+
+from PCA9685 import PCA9685 
+
+class Motor:
+    def __init__(self,pwm, channel, min_angle, zero_angle, max_angle, min_pulse, zero_pulse, max_pulse):
+        self.pwm = pwm
+        self.channel = channel
+        self.min_angle = min_angle
+        self.zero_angle = zero_angle
+        self.max_angle = max_angle
+        self.min_pulse = min_pulse
+        self.zero_pulse = zero_pulse
+        self.max_pulse = max_pulse
+    
+    def get_pulse_from_angle(self, angle):
+        
+        if(angle == self.min_angle): return self.min_pulse
+        if(angle == self.zero_angle): return self.zero_pulse
+        if(angle == self.max_angle): return self.max_pulse
+        
+        if(angle >= self.min_angle and angle < self.zero_angle):
+            pulse_per_angle = abs(self.zero_pulse - self.min_pulse) / abs(self.zero_angle - self.min_angle)
+            output_pulse = pulse_per_angle * angle
+            return output_pulse
+        
+        elif(angle >= self.zero_angle and angle <= self.max_angle):
+            pulse_per_angle = abs(self.max_pulse - self.zero_pulse) / abs(self.max_angle - self.zero_angle)
+            output_pulse = pulse_per_angle * angle
+            return output_pulse    
+        
+        else:
+            raise ValueError("This motor does not support the requested rotation angle.")
+            
+    
+    def set_rotation(self, angle):
+        pass
+    
+    def send_pulse(self, pulse):
+        if(pulse >= self.min_pulse and pulse <= self.max_pulse):
+            self.pwm.setServoPulse(self.channel, pulse)
+        else:
+            raise ValueError("The pulse you are trying to send in channel: " + str(self.channel) + " is not supported by design.")
