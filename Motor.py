@@ -31,7 +31,7 @@ class Motor:
             return output_pulse    
         
         else:
-            raise ValueError("This motor does not support the requested rotation angle.")
+            raise ValueError("This motor (" + str(self.channel) + ") does not support the requested rotation angle: " + str(angle))
             
     
     def set_rotation(self, angle):
@@ -43,4 +43,4 @@ class Motor:
         if(pulse >= self.min_pulse and pulse <= self.max_pulse):
             self.pwm.setServoPulse(self.channel, pulse)
         else:
-            raise ValueError("The pulse you are trying to send in channel: " + str(self.channel) + " is not supported by design.")
+            raise ValueError("The pulse you are trying to send in channel: " + str(self.channel) + " is not supported by design. " + str(pulse))
