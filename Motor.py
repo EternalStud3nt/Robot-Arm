@@ -22,12 +22,12 @@ class Motor:
         
         if(angle >= self.min_angle and angle < self.zero_angle):
             pulse_per_angle = abs(self.zero_pulse - self.min_pulse) / abs(self.zero_angle - self.min_angle)
-            output_pulse = pulse_per_angle * angle
+            output_pulse = pulse_per_angle * angle + self.zero_pulse
             return output_pulse
         
         elif(angle >= self.zero_angle and angle <= self.max_angle):
             pulse_per_angle = abs(self.max_pulse - self.zero_pulse) / abs(self.max_angle - self.zero_angle)
-            output_pulse = pulse_per_angle * angle
+            output_pulse = pulse_per_angle * angle + self.zero_pulse
             return output_pulse    
         
         else:
