@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import time
 import math
 from Motor import Motor
 from PCA9685 import PCA9685
@@ -24,32 +24,37 @@ class RobotArm:
 		# Vertical Rotation
 		self.rotation_motor = Motor(pwm, 1, -90, 0, 90, 512, 1524, 2580)
 		# Y Position
-		self.height_motor = Motor(pwm, 2, -45, 0, 81, 600, 1500, 2)
+		self.height_motor = Motor(pwm, 2, -45, 0, 81, 600, 1500, 2000)
 		# Z Position
-		self.depth_motor = Motor(pwm, 3, -45, 0, 90, 1000, 1500, 2500)
+		self.length_motor = Motor(pwm, 3, -45, 0, 90, 1000, 1500, 2500)
 
 		self.motors = [
 		self.grip_motor,
 		self.rotation_motor,
 		self.height_motor,
-		self.depth_motor,
+		self.length_motor,
 		]
+
+		for motor in self.motors:
+			motor.set_rotation(0)
+			time.sleep(0.1)
 
 	def set_theta(self, motor_id, angle):
 		self.motors[motor_id].set_rotation(angle)
 
 	def get_theta(self, motor_id):
-		self.motors[motor_id].last_rotation
+		return self.motors[motor_id].last_rotation
 
 	def get_height(self):
-		length_angle = math.radians(self.get_theta(self.depth_motor.channel))
+		length_angle = math.radians(self.get_theta(self.length_motor.channel))
 		height_angle = math.radians(self.get_theta(self.height_motor.channel))
 		y_1 = self.base_height + self.l_a * math.cos(length_angle)
 		y_2 = y_1 + self.l_b * math.sin(-height_angle)
 		return y_2
 
 	def get_length(self):
-		length_angle_rad = math.radians(self.get_theta(self.depth_motor.channel))
+		print(self.get_theta(0))
+		length_angle_rad = math.radians(self.get_theta(self.length_motor.channel)) 
 		height_angle_rad = math.radians(self.get_theta(self.height_motor.channel))
 		rotation_angle_rad = math.radians(self.get_theta(self.rotation_motor.channel))
 		z_1 = self.l_a * math.sin(length_angle_rad)
@@ -57,10 +62,11 @@ class RobotArm:
 		return z_2
 
 	def set_z(self, target_z):
-		x = self.get_length() * math.sin(self.get_theta(self.rotation_motor.channel))
+		last_rotation = math.radians(self.get_theta(self.rotation_motor.channel))
+		x = self.get_length() * math.sin(last_rotation)
 		target_rotation = math.atan(x / target_z)
 		rotation_angle = math.degrees(target_rotation)
-		target_length = x
+		target_length = target_z
 		if math.sin(target_rotation) != 0:
 			target_length = x / math.sin(rotation_angle)
 		self.set_theta(self.rotation_motor.channel, target_rotation)
@@ -68,11 +74,12 @@ class RobotArm:
 
 	def set_y(self, target_y):
 		[theta_a, theta_b] = compute_angles(self.get_length(), target_y)
-		self.set_theta(self.depth_motor.channel, theta_a)
-		self.set_theta(self.height_motor, theta_b)
+		self.set_theta(self.length_motor.channel, theta_a)
+		self.set_theta(self.height_motor.channel, theta_b)
 
 	def set_x(self, target_x):
-		z = self.get_length() * math.cos(self.get_theta(self.rotation_motor.channel))
+		last_rotation = math.radians(self.get_theta(self.rotation_motor.channel))
+		z = self.get_length() * math.cos(last_rotation)
 		target_rotation = math.atan(target_x / z)
 		rotation_angle = math.degrees(target_rotation)
 		target_length = z
@@ -83,13 +90,15 @@ class RobotArm:
 		self.set_length(target_length)
 
 	def set_length(self, target_length):
-		[theta_a, theta_b] = compute_angles(target_length, target_length)
-		self.set_theta(self.depth_motor.channel, theta_a)
-		self.set_theta(self.height_motor, theta_b)
+		[theta_a, theta_b] = compute_angles(self.get_height(), target_length)
+		self.set_theta(self.length_motor.channel, theta_a)
+		self.set_theta(self.height_motor.channel, theta_b)
 
 	def set_position(self, x, y, z):
 		self.set_x(x)
+		time.sleep(1)
 		self.set_y(y)
+		time.sleep(1)
 		self.set_z(z)
 
 	def debug(self):
@@ -102,8 +111,8 @@ class RobotArm:
 
 				self.set_position(x, y, z)
 				print(f"Moving to {x, y, z}.")
-		except KeyboardInterrupt:
-				print("\nExiting the program.")
+		except:
+			self.debug()
 
 
 arm = RobotArm()

@@ -51,3 +51,5 @@ def compute_angles(target_height, target_length):
     angle_b_deg = normalize_angle(angle_b_deg, 'sin')
 
     return angle_a_deg, angle_b_deg
+
+print(compute_angles(7, 7))
