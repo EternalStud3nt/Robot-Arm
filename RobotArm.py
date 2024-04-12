@@ -51,7 +51,6 @@ class RobotArm:
 	def get_length(self):
 		length_angle_rad = math.radians(self.get_theta(self.depth_motor.channel))
 		height_angle_rad = math.radians(self.get_theta(self.height_motor.channel))
-		rotation_angle_rad = math.radians(self.get_theta(self.rotation_motor.channel))
 		z_1 = self.l_a * math.sin(length_angle_rad)
 		z_2 = z_1 + self.l_b * math.cos(-height_angle_rad)
 		return z_2
