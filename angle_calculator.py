@@ -68,6 +68,7 @@ plt.figure(figsize=(10, 5))
 
 plt.subplot(1, 2, 1)
 plt.plot(angles, positions[:, 0])
+#x and y must have same first dimension, but have shapes (400,) and (160000,)
 plt.title('Height as a function of angles')
 plt.xlabel('Angles (radians)')
 plt.ylabel('Height (units)')
