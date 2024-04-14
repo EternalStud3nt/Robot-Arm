@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.optimize import fsolve
+import matplotlib.pyplot as plt
 
 def calculate_position_angles(angles, target_height, target_depth):
     # Constants for the lengths of the arms
@@ -52,4 +53,30 @@ def compute_angles(target_height, target_length):
 
     return angle_a_deg, angle_b_deg
 
-print(compute_angles(7, 7))
+# Compute the angles
+angle_a_deg, angle_b_deg = compute_angles(7, 7)
+print(angle_a_deg, angle_b_deg)
+
+# Create a range of angles for plotting
+angles = np.linspace(-np.pi, np.pi, 400)
+
+# Calculate the position for each angle
+positions = np.array([calculate_position_angles([angle_a, angle_b], 7, 7) for angle_a in angles for angle_b in angles])
+
+# Plot the two functions
+plt.figure(figsize=(10, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(angles, positions[:, 0])
+plt.title('Height as a function of angles')
+plt.xlabel('Angles (radians)')
+plt.ylabel('Height (units)')
+
+plt.subplot(1, 2, 2)
+plt.plot(angles, positions[:, 1])
+plt.title('Depth as a function of angles')
+plt.xlabel('Angles (radians)')
+plt.ylabel('Depth (units)')
+
+plt.tight_layout()
+plt.show()
