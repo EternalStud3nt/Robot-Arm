@@ -60,24 +60,31 @@ print(angle_a_deg, angle_b_deg)
 # Create a range of angles for plotting
 angles = np.linspace(-np.pi, np.pi, 400)
 
-# Calculate the position for each angle
-positions = np.array([calculate_position_angles([angle_a, angle_b], 7, 7) for angle_a in angles for angle_b in angles])
+# Calculate the position for each angle with angle_b fixed at its computed value
+positions_a = np.array([calculate_position_angles([angle, angle_b_deg], 7, 7) for angle in angles])
+
+# Calculate the position for each angle with angle_a fixed at its computed value
+positions_b = np.array([calculate_position_angles([angle_a_deg, angle], 7, 7) for angle in angles])
 
 # Plot the two functions
 plt.figure(figsize=(10, 5))
 
 plt.subplot(1, 2, 1)
-plt.plot(angles, positions[:, 0])
-#x and y must have same first dimension, but have shapes (400,) and (160000,)
+plt.plot(angles, positions_a[:, 0], label='angle_a')
+plt.plot(angles, positions_b[:, 0], label='angle_b')
 plt.title('Height as a function of angles')
 plt.xlabel('Angles (radians)')
 plt.ylabel('Height (units)')
+plt.legend()
 
 plt.subplot(1, 2, 2)
-plt.plot(angles, positions[:, 1])
+plt.plot(angles, positions_a[:, 1], label='angle_a')
+plt.plot(angles, positions_b[:, 1], label='angle_b')
 plt.title('Depth as a function of angles')
 plt.xlabel('Angles (radians)')
 plt.ylabel('Depth (units)')
+plt.legend()
 
 plt.tight_layout()
 plt.show()
+
