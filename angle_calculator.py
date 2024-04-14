@@ -31,8 +31,13 @@ def normalize_angle(angle, trig_function):
             angle = 180 - angle
         elif angle > 270:
             angle -= 360
-    elif trig_function == 'sin' and angle > 180:
-        angle -= 360
+    elif trig_function == 'sin':
+        if angle > 90 and angle <= 180:
+            angle = 180 - angle
+        elif(angle >= 180 and angle <= 270):
+            angle = 180 - angle
+        elif(angle > 270):
+            angle = angle - 360
     
     return angle
 
@@ -57,34 +62,4 @@ def compute_angles(target_height, target_length):
 angle_a_deg, angle_b_deg = compute_angles(7, 7)
 print(angle_a_deg, angle_b_deg)
 
-# Create a range of angles for plotting
-angles = np.linspace(-np.pi, np.pi, 400)
-
-# Calculate the position for each angle with angle_b fixed at its computed value
-positions_a = np.array([calculate_position_angles([angle, angle_b_deg], 7, 7) for angle in angles])
-
-# Calculate the position for each angle with angle_a fixed at its computed value
-positions_b = np.array([calculate_position_angles([angle_a_deg, angle], 7, 7) for angle in angles])
-
-# Plot the two functions
-plt.figure(figsize=(10, 5))
-
-plt.subplot(1, 2, 1)
-plt.plot(angles, positions_a[:, 0], label='angle_a')
-plt.plot(angles, positions_b[:, 0], label='angle_b')
-plt.title('Height as a function of angles')
-plt.xlabel('Angles (radians)')
-plt.ylabel('Height (units)')
-plt.legend()
-
-plt.subplot(1, 2, 2)
-plt.plot(angles, positions_a[:, 1], label='angle_a')
-plt.plot(angles, positions_b[:, 1], label='angle_b')
-plt.title('Depth as a function of angles')
-plt.xlabel('Angles (radians)')
-plt.ylabel('Depth (units)')
-plt.legend()
-
-plt.tight_layout()
-plt.show()
 

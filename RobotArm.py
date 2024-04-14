@@ -39,9 +39,6 @@ class RobotArm:
 			motor.set_rotation(0)
 			time.sleep(0.1)
 
-	def set_theta(self, motor_id, angle):
-		self.motors[motor_id].set_rotation(angle)
-
 	def get_motor_rotation(self, motor_id):
 		return self.motors[motor_id].last_rotation
 
