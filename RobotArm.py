@@ -3,7 +3,7 @@ import time
 import math
 from Motor import Motor
 from PCA9685 import PCA9685
-from angle_calculator import compute_angles
+import angle_calculator as ac
 
 
 class RobotArm:
@@ -54,45 +54,19 @@ class RobotArm:
 		depth = -self.l_a * math.sin(length_angle) + self.l_b * math.cos(height_angle)
 		return depth
 
-	def set_z(self, target_z):
-		last_rotation = math.radians(self.rotation_motor.last_rotation)
-		x = self.get_length() * math.sin(last_rotation)
-		target_rotation = math.atan(x / target_z)
-		target_length = target_z
-		if math.sin(target_rotation) != 0:
-			target_length = x / math.sin(target_rotation)
-   
-		self.rotation_motor.set_rotation(math.degrees(target_rotation))
-		self.set_length(target_length)
+	def set_motor_rotations(self, angles):
+		self.grip_motor.set_rotation(math.degrees(angles[0]))
+		self.rotation_motor.set_rotation(math.degrees(angles[1]))
+		self.height_motor.set_rotation(math.degrees(angles[2]))
+		self.length_motor.set_rotation(math.degrees(angles[3]))
 
-	def set_y(self, target_y):
-		[theta_a, theta_b] = compute_angles(self.get_length(), target_y)
-		self.length_motor.set_rotation(theta_a)
-		self.height_motor.set_rotation(theta_b)
+	def set_position(self, grip, x, y, z):
+		target_length = ac.find_length_xz(x, z)
 
-	def set_x(self, target_x):
-		last_rotation = math.radians(self.rotation_motor.last_rotation)
-		z = self.get_length() * math.cos(last_rotation)
-		target_rotation = math.atan(target_x / z)
-		target_length = z
-		if math.sin(target_rotation) != 0:
-			target_length = target_x / math.sin(target_rotation)
-			
-		self.rotation_motor.set_rotation(math.degrees(target_rotation))	
-		self.set_length(target_length)
-
-	def set_length(self, target_length):
-		[theta_a, theta_b] = compute_angles(self.get_height(), target_length)
-		self.length_motor.set_rotation(theta_a)
-		self.height_motor.set_rotation(theta_b)
-
-	def set_position(self, x, y, z):
-		self.set_x(x)
-		time.sleep(1)
-		self.set_y(y)
-		time.sleep(1)
-		self.set_z(z)
-		time.sleep(1)
+		angles_zy = ac.find_angles_yz(y, target_length)
+		angle_rotation = ac.find_angle_xz(x, z)
+		angles = [grip, angle_rotation, angles_zy[0], angles_zy[1]]
+		self.set_motor_rotations(angles)
 
 	def debug(self):
 
