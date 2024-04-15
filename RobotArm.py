@@ -43,18 +43,16 @@ class RobotArm:
 		return self.motors[motor_id].last_rotation
 
 	def get_height(self):
-		length_angle = math.radians(self.length_motor.last_rotation)
-		height_angle = math.radians(self.height_motor.last_rotation)
-		y_1 = self.base_height + self.l_a * math.cos(length_angle)
-		y_2 = y_1 - self.l_b * math.sin(height_angle)
-		return y_2
-
+		length_angle = -math.radians(self.length_motor.last_rotation)
+		height_angle = -math.radians(self.height_motor.last_rotation)
+		height = self.base_height + self.l_a * math.cos(length_angle) + self.l_b * math.sin(height_angle)
+		return height
+ 
 	def get_length(self):
-		length_angle_rad = math.radians(self.length_motor.last_rotation) 
-		height_angle_rad = math.radians(self.height_motor.last_rotation)
-		z_1 = self.l_a * math.sin(length_angle_rad)
-		z_2 = z_1 + self.l_b * math.cos(height_angle_rad)
-		return z_2
+		length_angle = -math.radians(self.length_motor.last_rotation) 
+		height_angle = -math.radians(self.height_motor.last_rotation)
+		depth = -self.l_a * math.sin(length_angle) + self.l_b * math.cos(height_angle)
+		return depth
 
 	def set_z(self, target_z):
 		last_rotation = math.radians(self.rotation_motor.last_rotation)
