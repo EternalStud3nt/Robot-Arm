@@ -20,12 +20,12 @@ def find_angles_yz(target_height, target_length):
 
     # Use fsolve to solve the system of equations
     angles = fsolve(equations, (angle_a_guess, angle_b_guess))
-    angles = [-1 * angles[0], -1 * angles[1]]
+    angles = [-1 * angles[0], angles[1]]
     return angles
 
 def find_angle_xz(target_x, target_z):
     theta = np.arctan(target_x/target_z)
-    return theta
+    return -theta
 
 def find_length_xz(target_x, target_z):
     target_length = np.sqrt(target_x**2 + target_z**2)
@@ -33,9 +33,9 @@ def find_length_xz(target_x, target_z):
     
 
 # Usage
-target_x = 5
-target_y = 15.5  
-target_z = 12
+target_x = 0
+target_y = 18
+target_z = 8
 target_length = find_length_xz(target_x, target_z)
 
 angles1 = find_angles_yz(target_y, target_length)

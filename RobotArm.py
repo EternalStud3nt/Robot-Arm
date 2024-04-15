@@ -24,9 +24,9 @@ class RobotArm:
 		# Vertical Rotation
 		self.rotation_motor = Motor(pwm, 1, -90, 0, 90, 512, 1524, 2580)
 		# Y Position
-		self.height_motor = Motor(pwm, 2, -45, 0, 81, 600, 1500, 2000)
+		self.height_motor = Motor(pwm, 2, -60, 0, 81, 600, 1500, 2000)
 		# Z Position
-		self.length_motor = Motor(pwm, 3, -45, 0, 90, 1000, 1500, 2500)
+		self.length_motor = Motor(pwm, 3, -60, 0, 90, 1000, 1500, 2500)
 
 		self.motors = [
 		self.grip_motor,
@@ -54,30 +54,35 @@ class RobotArm:
 		depth = -self.l_a * math.sin(length_angle) + self.l_b * math.cos(height_angle)
 		return depth
 
-	def set_motor_rotations(self, angles):
-		self.grip_motor.set_rotation(math.degrees(angles[0]))
-		self.rotation_motor.set_rotation(math.degrees(angles[1]))
-		self.height_motor.set_rotation(math.degrees(angles[2]))
-		self.length_motor.set_rotation(math.degrees(angles[3]))
+	def set_motor_rotations(self, data):
+		self.grip_motor.send_pulse(data[0])
+		self.rotation_motor.set_rotation(math.degrees(data[1]))
+		self.height_motor.set_rotation(math.degrees(data[2]))
+		self.length_motor.set_rotation(math.degrees(data[3]))
+		print(math.degrees(data[2]))
+		print(math.degrees(data[3]))
+
 
 	def set_position(self, grip, x, y, z):
+		grip = -grip * (2000/100) + 2000 + self.grip_motor.min_pulse
+		print(grip)
 		target_length = ac.find_length_xz(x, z)
 
 		angles_zy = ac.find_angles_yz(y, target_length)
 		angle_rotation = ac.find_angle_xz(x, z)
-		angles = [grip, angle_rotation, angles_zy[0], angles_zy[1]]
+		angles = [grip, angle_rotation, angles_zy[1], angles_zy[0]]
 		self.set_motor_rotations(angles)
 
 	def debug(self):
-
 		try:
 			while True:
+				grip = float(input("Enter grip strength (0-100): "))
 				x = float(input("Enter x value:"))
 				y = float(input("Enter y value: "))
 				z = float(input("Enter z value: "))
 
-				self.set_position(x, y, z)
-				print(f"Moving to {x, y, z}.")
+				self.set_position(grip, x, y, z)
+				print(f"Moving to {grip, x, y, z}.")
 		except:
 			self.debug()
 
