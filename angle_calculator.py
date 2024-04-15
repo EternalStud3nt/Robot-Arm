@@ -1,65 +1,27 @@
 import numpy as np
 from scipy.optimize import fsolve
-import matplotlib.pyplot as plt
 
-def calculate_position_angles(angles, target_height, target_depth):
-    # Constants for the lengths of the arms
-    arm_length_a = 8
-    arm_length_b = 8
-    base_height = 7.5
-    
-    # Extract the angles from the input array
-    angle_a = angles[0]
-    angle_b = angles[1]
-    
-    # Initialize the output array
-    output = np.empty(2)
-    
-    # Calculate the position based on the angles and arm lengths
-    output[0] = base_height + arm_length_a * np.cos(angle_a) + arm_length_b * np.sin(angle_b) - target_height
-    output[1] = arm_length_a * np.sin(angle_a) + arm_length_b * np.cos(angle_b) - target_depth
-    
-    return output
+# Constants
+arm_length_a = 8
+arm_length_b = 8
+base_height = 7.5
 
-def normalize_angle(angle, trig_function):
-    # Normalize the angle to the range 0-360
-    angle = angle % 360
-    
-    # Adjust the angle based on the trigonometric function
-    if trig_function == 'cos':
-        if 90 < angle <= 270:
-            angle = 180 - angle
-        elif angle > 270:
-            angle -= 360
-    elif trig_function == 'sin':
-        if angle > 90 and angle <= 180:
-            angle = 180 - angle
-        elif(angle >= 180 and angle <= 270):
-            angle = 180 - angle
-        elif(angle > 270):
-            angle = angle - 360
-    
-    return angle
+# Target values
+target_height = 15.5  # replace with your target height
+target_length = 8  # replace with your target length
 
-def compute_angles(target_height, target_length):
-    # Initial guess for the angles
-    initial_guess = np.asarray([0, 0])
-    
-    # Use fsolve to find the angles that result in the target position
-    angles = fsolve(lambda angles: calculate_position_angles(angles, target_height, target_length), initial_guess)
-    
-    # Convert the angles from radians to degrees
-    angle_a_deg = np.rad2deg(angles[0])
-    angle_b_deg = np.rad2deg(angles[1])
+# System of equations
+def equations(vars):
+    angle_a, angle_b = vars
+    eq1 = base_height + arm_length_a * np.cos(np.radians(angle_a)) + arm_length_b * np.sin(np.radians(angle_b)) - target_height
+    eq2 = arm_length_a * np.sin(np.radians(angle_a)) + arm_length_b * np.cos(np.radians(angle_b)) - target_length
+    return [eq1, eq2]
 
-    # Normalize the angles to the range -90 to 90
-    angle_a_deg = normalize_angle(angle_a_deg, 'cos')
-    angle_b_deg = normalize_angle(angle_b_deg, 'sin')
+# Initial guess for angles in degrees
+angle_a_guess = 0
+angle_b_guess = 0
 
-    return angle_a_deg, angle_b_deg
+# Use fsolve to solve the system of equations
+angles = fsolve(equations, (angle_a_guess, angle_b_guess))
 
-# Compute the angles
-angle_a_deg, angle_b_deg = compute_angles(7, 7)
-print(angle_a_deg, angle_b_deg)
-
-
+print(f"Solution: angle_a = {angles[0]}, angle_b = {angles[1]}")
