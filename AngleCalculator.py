@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.optimize import fsolve
+import time;
 
 # Constants
 arm_length_a = 8
@@ -31,7 +32,7 @@ def find_length_xz(target_x, target_z):
     target_length = np.sqrt(target_x**2 + target_z**2)
     return target_length
     
-
+start = time.time()
 # Usage
 target_x = 0
 target_y = 18
@@ -40,5 +41,8 @@ target_length = find_length_xz(target_x, target_z)
 
 angles1 = find_angles_yz(target_y, target_length)
 angle2 = find_angle_xz(target_x, target_z)
+end = time.time()
+dif = end - start
 print(f"Solution: angle_a = {np.degrees(angles1[0])}, angle_b = {np.degrees(angles1[1])}")
 print(f"Solution: angle_c = {np.degrees(angle2)}")
+print(dif)

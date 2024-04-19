@@ -3,7 +3,7 @@ import time
 import math
 from Motor import Motor
 from PCA9685 import PCA9685
-import angle_calculator as ac
+import AngleCalculator as ac
 
 
 class RobotArm:
