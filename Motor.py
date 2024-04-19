@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import time;
 from PCA9685 import PCA9685 
 
 class Motor:
@@ -29,10 +29,19 @@ class Motor:
             raise ValueError("This motor (" + str(self.channel) + ") does not support the requested rotation angle: " + str(angle))
             
     
-    def set_rotation(self, angle):
-        pulse = self.get_pulse_from_angle(angle)
-        self.send_pulse(pulse)
-        self.last_rotation = angle
+    def set_rotation(self, rotation):
+        if self.last_rotation < rotation:
+            step = 1
+        else:
+            step = -1
+
+        for i in range(self.last_rotation, rotation, step):
+            pulse = self.get_pulse_from_angle(i)
+            self.send_pulse(pulse)
+            time.sleep(0.2)
+
+        self.last_rotation = rotation
+
     
     def send_pulse(self, pulse):
         if(pulse >= self.min_pulse and pulse <= self.max_pulse):
