@@ -1,7 +1,8 @@
 import pygame
 import time
+from UpdatableType import UpdatableType
 
-class GameController:
+class GameController(metaclass=UpdatableType):
     def __init__(self):
         pygame.init()
         pygame.joystick.init()

@@ -41,7 +41,6 @@ class InputSystem(metaclass=UpdatableType):
         return False
 
     def update(self):
-        self.game_controller.update()
         # Check all actions
         for action in self.action_map.keys():
             if self.is_action_triggered(action):
