@@ -5,10 +5,12 @@ from Player import Player
 
 # Instantiate your classes...
 input_system = InputSystem()
+deltatime = 0
 
 print("Press any key or button...")
 
 while True:
+    deltatime = time.time() - deltatime
     # Iterate over all updatable instances
     for instance in UpdatableType.updatable_instances:
         # Check if the instance has an 'update' method

@@ -14,6 +14,11 @@ class RobotArm:
 	l_1 = 3.5
 	l_2 = 8
 	l_3 = 3.5
+ 
+	x: float = 0
+	y: float = 0
+	z: float = 0
+	grip: float = 0
 
 	def __init__(self):
 		pwm = PCA9685(0x40, debug=False)
@@ -39,8 +44,7 @@ class RobotArm:
 			motor.set_rotation(0)
 			time.sleep(0.1)
 
-	def get_motor_rotation(self, motor_id):
-		return self.motors[motor_id].last_rotation
+		self.set_position(50, 0, 15.5, 8)
 
 	def get_height(self):
 		length_angle = -math.radians(self.length_motor.last_rotation)
@@ -71,7 +75,21 @@ class RobotArm:
 		angles_zy = ac.find_angles_yz(y, target_length)
 		angle_rotation = ac.find_angle_xz(x, z)
 		angles = [grip, angle_rotation, angles_zy[1], angles_zy[0]]
-		self.set_motor_rotations(angles)
+		try:
+			self.set_motor_rotations(angles)
+	
+			self.grip = grip
+			self.x = x
+			self.y = y
+			self.z = z
+		except Exception as e:
+			print("Couldn't move to this position: " + e)
+
+	def change_position(self, direction: tuple):
+		self.set_position(self.grip, direction[0], direction[1], direction[2])
+
+	def change_grip(self, percentage: float):
+		self.set_position(self.grip + percentage, self.x, self.y, self.z)
 
 	def debug(self):
 		try:

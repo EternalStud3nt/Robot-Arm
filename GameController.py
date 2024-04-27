@@ -4,10 +4,13 @@ from UpdatableType import UpdatableType
 
 class GameController(metaclass=UpdatableType):
     def __init__(self):
-        pygame.init()
-        pygame.joystick.init()
-        self.joystick = pygame.joystick.Joystick(0)
-        self.joystick.init()
+        try:
+            pygame.init()
+            pygame.joystick.init()
+            self.joystick = pygame.joystick.Joystick(0)
+            self.joystick.init()
+        except Exception as e:
+            print("No controller connected.")
 
         # Initialize joystick axes
         self.axes = {

@@ -52,5 +52,5 @@ if __name__ == "__main__":
     input_system = InputSystem()
     print("Press any key or button...")
     
-    # while True:
-    #     input_system.update()
+    while True:
+        input_system.update()
