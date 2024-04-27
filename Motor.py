@@ -3,7 +3,7 @@ import time;
 from PCA9685 import PCA9685 
 
 class Motor:
-    last_rotation = 90
+    last_rotation = 0
     
     def __init__(self,pwm, channel, min_angle, zero_angle, max_angle, min_pulse, zero_pulse, max_pulse):
         self.pwm = pwm
@@ -16,9 +16,9 @@ class Motor:
         self.max_pulse = max_pulse
     
     def get_pulse_from_angle(self, angle):
-        if(angle == self.min_angle): return self.min_pulse
+        if(angle <= self.min_angle): return self.min_pulse
         if(angle == self.zero_angle): return self.zero_pulse
-        if(angle == self.max_angle): return self.max_pulse
+        if(angle >= self.max_angle): return self.max_pulse
         
         if(angle >= self.min_angle and angle <= self.max_angle):
             pulse_per_angle = 2000 / 180

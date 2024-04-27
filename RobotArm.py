@@ -83,7 +83,7 @@ class RobotArm:
 			self.y = y
 			self.z = z
 		except Exception as e:
-			print("Couldn't move to this position: " + e)
+			print("Couldn't move to this position: ")
 
 	def change_position(self, direction: tuple):
 		self.set_position(self.grip, direction[0], direction[1], direction[2])
@@ -105,5 +105,6 @@ class RobotArm:
 			self.debug()
 
 
-arm = RobotArm()
-arm.debug()
+if __name__ == "main":
+	arm = RobotArm()
+	arm.debug()

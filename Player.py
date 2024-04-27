@@ -1,5 +1,5 @@
 from RobotArm import RobotArm
-import main
+import Constants
 
 class Player:
     def __init__(self, input_system):
@@ -29,7 +29,7 @@ class Player:
     def handle_input_action(self, action):
         if action.startswith("move"):
             direction = self.action_to_value[action]
-            self.robot_arm.change_position(direction * main.deltatime * self.delta_pos_per_second)
+            self.robot_arm.change_position(direction * Constants.deltatime * self.delta_pos_per_second)
         if "grip" in action:
             delta_grip = self.action_to_value[action]
-            self.robot_arm.change_grip(delta_grip * main.deltatime * self.delta_grip_per_second)
+            self.robot_arm.change_grip(delta_grip * Constants.deltatime * self.delta_grip_per_second)

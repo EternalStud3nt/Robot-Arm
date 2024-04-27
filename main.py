@@ -1,16 +1,17 @@
 from InputSystem import InputSystem
 from UpdatableType import UpdatableType
-import time
+import Constants
 from Player import Player
+import time
 
 # Instantiate your classes...
 input_system = InputSystem()
-deltatime = 0
+player = Player(input_system)
 
 print("Press any key or button...")
 
 while True:
-    deltatime = time.time() - deltatime
+    Constants.deltatime = time.time() - Constants.deltatime
     # Iterate over all updatable instances
     for instance in UpdatableType.updatable_instances:
         # Check if the instance has an 'update' method
