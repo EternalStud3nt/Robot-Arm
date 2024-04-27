@@ -29,7 +29,9 @@ class Player:
     def handle_input_action(self, action):
         if action.startswith("move"):
             direction = self.action_to_value[action]
-            self.robot_arm.change_position(direction * Constants.deltatime * self.delta_pos_per_second)
+            # Multiply each element in the direction list
+            direction = [d * Constants.deltatime * self.delta_pos_per_second for d in direction]
+            self.robot_arm.change_position(direction)
         if "grip" in action:
             delta_grip = self.action_to_value[action]
             self.robot_arm.change_grip(delta_grip * Constants.deltatime * self.delta_grip_per_second)
