@@ -1,4 +1,4 @@
-def angle_to_pulse(self, angle):
+def angle_to_pulse(angle):
     if (angle <= 0): return 500
     elif (angle >= 180): return 2500
     
