@@ -2,7 +2,7 @@ from motor import Motor
 import time
 from pynput import keyboard
 
-rotation_speed = 30  # degrees per second
+rotation_speed = 100  # degrees per second
 
 def on_press(key):
     global rotating_left, rotating_right, last_time
