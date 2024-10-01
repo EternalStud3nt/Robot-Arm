@@ -1,4 +1,5 @@
 from motor import Motor
+from PCA9685 import PCA9685
 import time
 from pynput import keyboard
 
@@ -28,9 +29,13 @@ def manual_control():
         motor_0.set_rotation(pulse)
 
 if __name__ == "__main__":
-    
     print("Welcome to the controller...")
-    motor_0 = Motor(0)
+    pwm = PCA9685(0x40, debug=False)
+    pwm.setPWMFreq(50)
+    
+    motor_0 = Motor(0, pwm)
+    #manual_control()
+    
     motor_0.set_rotation(90)
     
     rotating_left = False
@@ -59,3 +64,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         listener.stop()
         print("\nController stopped.")
+

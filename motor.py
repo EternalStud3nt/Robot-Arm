@@ -2,9 +2,9 @@ from PCA9685 import PCA9685
 import conversions
 
 class Motor:
-    def __init__(self, channel):
+    def __init__(self, channel, pca):
         self.channel = channel
-        self.pwm = PCA9685()
+        self.pwm = pca
         self.rotation = 0
         self.set_rotation(90)
     
