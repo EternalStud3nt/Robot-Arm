@@ -5,7 +5,9 @@ from event import Event
 rotate_left_event = Event()
 rotate_right_event = Event()
 rotate_forwards_event = Event()
-rotate_upwards_event = Event()
+rotate_backwards_event = Event()
+move_upwards_event = Event()
+move_downwards_event = Event()
 
 def on_press(key):
     if key == keyboard.Key.left:
@@ -15,7 +17,11 @@ def on_press(key):
     elif key == keyboard.Key.up:
         rotate_forwards_event.invoke(time.time())
     elif key == keyboard.Key.down:
-        rotate_upwards_event.invoke(time.time())
+        rotate_backwards_event.invoke(time.time())
+    elif key == keyboard.Key.space:
+        move_upwards_event.invoke(time.time())
+    elif key == keyboard.Key.shift:
+        move_downwards_event.invoke(time.time())
 
 def on_release(key):
     if key == keyboard.Key.left:
@@ -25,7 +31,11 @@ def on_release(key):
     elif key == keyboard.Key.up:
         rotate_forwards_event.invoke(None)  # Stop rotating forwards
     elif key == keyboard.Key.down:
-        rotate_upwards_event.invoke(None)  # Stop rotating upwards
+        rotate_backwards_event.invoke(None)  # Stop rotating backwards
+    elif key == keyboard.Key.space:
+        move_upwards_event.invoke(None)  # Stop moving upwards
+    elif key == keyboard.Key.shift:
+        move_downwards_event.invoke(None)  # Stop moving downwards
 
 listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 listener.start()
