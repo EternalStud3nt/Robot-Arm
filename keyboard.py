@@ -2,40 +2,47 @@ import time
 from pynput import keyboard
 from event import Event 
 
-rotate_left_event = Event()
-rotate_right_event = Event()
-rotate_forwards_event = Event()
-rotate_backwards_event = Event()
-move_upwards_event = Event()
-move_downwards_event = Event()
+on_left_arrow_press = Event()
+on_right_arrow_press = Event()
+on_up_arrow_press = Event()
+on_down_arrow_press = Event()
+on_space_press = Event()
+on_shift_press = Event()
+
+on_left_arrow_release = Event()
+on_right_arrow_release = Event()
+on_up_arrow_release = Event()
+on_down_arrow_release = Event()
+on_space_release = Event()
+on_shift_release = Event()
 
 def on_press(key):
     if key == keyboard.Key.left:
-        rotate_left_event.invoke(time.time())  # Invoke event with current time
+        on_left_arrow_press.invoke()
     elif key == keyboard.Key.right:
-        rotate_right_event.invoke(time.time())
+        on_right_arrow_press.invoke()
     elif key == keyboard.Key.up:
-        rotate_forwards_event.invoke(time.time())
+        on_up_arrow_press.invoke()
     elif key == keyboard.Key.down:
-        rotate_backwards_event.invoke(time.time())
+        on_down_arrow_press.invoke()
     elif key == keyboard.Key.space:
-        move_upwards_event.invoke(time.time())
+        on_space_press.invoke()
     elif key == keyboard.Key.shift:
-        move_downwards_event.invoke(time.time())
+        on_shift_press.invoke()
 
 def on_release(key):
     if key == keyboard.Key.left:
-        rotate_left_event.invoke(None)  # Stop rotating left
+        on_left_arrow_release.invoke()
     elif key == keyboard.Key.right:
-        rotate_right_event.invoke(None)  # Stop rotating right
+        on_right_arrow_release.invoke()
     elif key == keyboard.Key.up:
-        rotate_forwards_event.invoke(None)  # Stop rotating forwards
+        on_up_arrow_release.invoke()
     elif key == keyboard.Key.down:
-        rotate_backwards_event.invoke(None)  # Stop rotating backwards
+        on_down_arrow_release.invoke()
     elif key == keyboard.Key.space:
-        move_upwards_event.invoke(None)  # Stop moving upwards
+        on_space_release.invoke()
     elif key == keyboard.Key.shift:
-        move_downwards_event.invoke(None)  # Stop moving downwards
+        on_shift_release.invoke()
 
 listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 listener.start()
