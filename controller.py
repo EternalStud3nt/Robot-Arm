@@ -64,8 +64,8 @@ if __name__ == "__main__":
     motor_0 = Motor(0, pwm)
     #manual_control()
     
-    motor_1 = Motor(1)
-    motor_2 = Motor(2)
+    motor_1 = Motor(1, pwm)
+    motor_2 = Motor(2, pwm)
     motor_0.set_rotation(90)
     motor_1.set_rotation(90)
     motor_2.set_rotation(90)
