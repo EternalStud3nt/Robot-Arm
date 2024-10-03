@@ -51,14 +51,15 @@ def control_manually():
         motor_0.set_rotation(pulse)
 
 if __name__ == "__main__":
+    pwm = PCA9685(0x40, debug=False)
+    pwm.setPWMFreq(50)
+    
     print("Welcome to the controller...")
     keyboard.rotate_left_event.subscribe(rotate_left)
     keyboard.rotate_right_event.subscribe(rotate_right)
     keyboard.rotate_forwards_event.subscribe(rotate_forwards)
     keyboard.rotate_upwards_event.subscribe(rotate_upwards)
     
-    pwm = PCA9685(0x40, debug=False)
-    pwm.setPWMFreq(50)
     
     motor_0 = Motor(0, pwm)
     #manual_control()
