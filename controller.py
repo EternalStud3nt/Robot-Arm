@@ -1,4 +1,5 @@
 from motor import Motor
+from PCA9685 import PCA9685
 import time
 import keyboard
 
@@ -56,7 +57,12 @@ if __name__ == "__main__":
     keyboard.rotate_forwards_event.subscribe(rotate_forwards)
     keyboard.rotate_upwards_event.subscribe(rotate_upwards)
     
-    motor_0 = Motor(0)
+    pwm = PCA9685(0x40, debug=False)
+    pwm.setPWMFreq(50)
+    
+    motor_0 = Motor(0, pwm)
+    #manual_control()
+    
     motor_1 = Motor(1)
     motor_2 = Motor(2)
     motor_0.set_rotation(90)
@@ -85,3 +91,4 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("\nController stopped.")
+
