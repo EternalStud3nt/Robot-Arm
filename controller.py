@@ -1,44 +1,67 @@
 from motor import Motor
 import time
-from pynput import keyboard
+import keyboard
 
 rotation_speed = 100  # degrees per second
 
-def on_press(key):
-    global rotating_left, rotating_right, last_time
-    if key == keyboard.Key.left:
-        rotating_left = True
-        last_time = time.time()  # Record the time when key is pressed
-    elif key == keyboard.Key.right:
-        rotating_right = True
-        last_time = time.time()
+rotating_left = False
+rotating_right = False
+rotating_forwards = False
+rotating_upwards = False
+last_time = time.time()
 
-def on_release(key):
-    global rotating_left, rotating_right
-    if key == keyboard.Key.left:
+def rotate_left(event_time):
+    global rotating_left, last_time
+    if event_time is not None:
+        rotating_left = True
+        last_time = event_time
+    else:
         rotating_left = False
-    elif key == keyboard.Key.right:
+
+def rotate_right(event_time):
+    global rotating_right, last_time
+    if event_time is not None:
+        rotating_right = True
+        last_time = event_time
+    else:
         rotating_right = False
 
+def rotate_forwards(event_time):
+    global rotating_forwards, last_time
+    if event_time is not None:
+        rotating_forwards = True
+        last_time = event_time
+    else:
+        rotating_forwards = False
+
+def rotate_upwards(event_time):
+    global rotating_upwards, last_time
+    if event_time is not None:
+        rotating_upwards = True
+        last_time = event_time
+    else:
+        rotating_upwards = False
+
 # Debug function for manual angle input
-def manual_control():
+def control_manually():
     while True:
         pulse = input("Enter angle: ")
         pulse = int(pulse)
         motor_0.set_rotation(pulse)
 
 if __name__ == "__main__":
-    
     print("Welcome to the controller...")
-    motor_0 = Motor(0)
-    motor_0.set_rotation(90)
+    keyboard.rotate_left_event.subscribe(rotate_left)
+    keyboard.rotate_right_event.subscribe(rotate_right)
+    keyboard.rotate_forwards_event.subscribe(rotate_forwards)
+    keyboard.rotate_upwards_event.subscribe(rotate_upwards)
     
-    rotating_left = False
-    rotating_right = False
-    last_time = time.time()
-
-    listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-    listener.start()
+    motor_0 = Motor(0)
+    motor_1 = Motor(1)
+    motor_2 = Motor(2)
+    motor_0.set_rotation(90)
+    motor_1.set_rotation(90)
+    motor_2.set_rotation(90)
 
     try:
         while True:
@@ -49,6 +72,10 @@ if __name__ == "__main__":
                 motor_0.rotate(-rotation_speed * time_delta)  # Rotate left
             elif rotating_right:
                 motor_0.rotate(rotation_speed * time_delta)  # Rotate right
+            elif rotating_forwards:
+                motor_1.rotate(rotation_speed * time_delta)  # Rotate forwards
+            elif rotating_upwards:
+                motor_2.rotate(rotation_speed * time_delta)  # Rotate upwards
             
             last_time = current_time  # Update the last_time
             time.sleep(0.01)  # Small delay to avoid high CPU usage
@@ -57,5 +84,4 @@ if __name__ == "__main__":
         # manual_control()
 
     except KeyboardInterrupt:
-        listener.stop()
         print("\nController stopped.")
