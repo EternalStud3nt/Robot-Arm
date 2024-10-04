@@ -24,6 +24,7 @@ class Robot_Arm:
         self.position = [0, 15.5, 8]
         
     def set_rotation(self, motor, angle):
+        angle = angle * math.deg2rad
         self.motors[motor].set_rotation(angle)
         
     def set_rotations(self, angles):
@@ -40,16 +41,18 @@ class Robot_Arm:
             return
         
         l_s = 8
-        l_xy = math.sqrt(x**2 + y**2)
-        l = math.sqrt(l_xy**2 + z**2)
+        l_xz = math.sqrt(x**2 + z**2)
+        l = math.sqrt(l_xz**2 + y**2)
         theta = math.acos((l/2)/l_s)
-        phi = math.atan(y/x)
+        phi = 0
+        if x != 0:
+            phi = math.atan(x/z)
         a1 = phi + theta
         a2 = phi - theta
         
         theta_alpha = a1 - math.pi/2
         theta_beta = -a2
-        theta_gamma = phi
+        theta_gamma = phi + math.pi/2
         
         self.set_rotations([theta_gamma, theta_alpha, theta_beta])
         self.position = [x, y, z]

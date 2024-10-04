@@ -5,11 +5,12 @@ def manual_test_set_position():
     robot_arm = Robot_Arm()
     
     try:
-        x = float(input("Enter x position: "))
-        y = float(input("Enter y position: "))
-        z = float(input("Enter z position: "))
+        while True:
+            x = float(input("Enter x position: "))
+            y = float(input("Enter y position: "))
+            z = float(input("Enter z position: "))
         
-        robot_arm.set_position(x, y, z)
+            robot_arm.set_position(x, y, z)
         print(f"Resulting Position: {robot_arm.position}")
     except ValueError:
         print("Invalid input. Please enter numeric values.")

@@ -123,5 +123,5 @@ def initialize():
 
 if __name__ == "__main__":
     print("Welcome to the controller...")
-    initialize()
+    initialize( )
     handle_input()
