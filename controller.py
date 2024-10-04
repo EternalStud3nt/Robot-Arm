@@ -12,7 +12,7 @@ rotating_left = False
 rotating_right = False
 last_time = time.time()
 
-#region Motor control functions
+# region Motor control functions
 def move_forwards():
     global moving_forwards
     moving_forwards = True
