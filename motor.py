@@ -15,8 +15,6 @@ class Motor:
         pulse = conversions.angle_to_pulse(angle)
         self.pwm.setServoPulse(self.channel, pulse)
         self.rotation = angle
-        print(self.rotation)
-        print("Sending a pulse of: " + str(pulse))  # Convert pulse to string
     
     def rotate(self, delta_angle):
         new_angle = self.rotation + delta_angle

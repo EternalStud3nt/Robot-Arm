@@ -67,7 +67,7 @@ def debug_arm():
     while True:
         pulse = input("Enter angle: ")
         pulse = int(pulse)
-        motor_0.set_rotation(pulse)
+        motor_2.set_rotation(pulse)
 
 # Handle the input from the keyboard
 def handle_input():
@@ -124,4 +124,5 @@ def initialize():
 if __name__ == "__main__":
     print("Welcome to the controller...")
     initialize( )
-    handle_input()
+    #handle_input()
+    debug_arm()
