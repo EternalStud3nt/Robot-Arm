@@ -5,6 +5,7 @@ from robot_arm import Robot_Arm
 class Controller:
     def __init__(self):
         self.move_speed = 5  # centimeters per second
+        self.rotation_speed = 30 # degrees per second
         self.last_time = time.time()
         
         print("Welcome to the controller...")
@@ -25,21 +26,29 @@ class Controller:
             while True:
                 current_time = time.time()
                 delta_time = current_time - self.last_time  # Time since last update
-                
                 input = self.input_manager.arrow_input
+                input_x = input[0]
+                input_y = input[1]
                 
-                self.robot.move_sideways(input[0] * self.move_speed * delta_time)
+                if(input_x != 0):
+                    val = input_x * self.rotation_speed * delta_time
+                    print(input_x)
+                    self.robot.rotate(val)
                 if self.input_manager.space_pressed:
                     self.robot.move_upwards(self.move_speed * delta_time)
                 elif self.input_manager.shift_pressed:
-                    self.robot.move_downwards(self.move_speed * delta_time)
-                self.robot.move_forwards(input[2] * self.move_speed * delta_time)
+                    self.robot.move_upwards(- self.move_speed * delta_time)
+                if(input_y != 0):
+                    self.robot.move_forwards(input_y * self.move_speed * delta_time)
                 
+                
+                
+                
+                time.sleep(0.01)  # Small delay to avoid h    igh CPU usage
                 self.last_time = current_time  # Update the last_time
-                time.sleep(0.01)  # Small delay to avoid high CPU usage
 
         except KeyboardInterrupt:
             print("\nController stopped.")
 
 if __name__ == "__main__":
-    controller = Controller()
+    controller = Controller() 

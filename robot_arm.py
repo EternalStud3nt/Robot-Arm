@@ -22,6 +22,7 @@ class Robot_Arm:
         
         self.reset_motors()
         self.position = [0, 15.5, 8]
+        self.rotation = 0
         
     def set_rotation(self, motor, angle):
         self.motors[motor].set_rotation(angle)
@@ -38,15 +39,34 @@ class Robot_Arm:
     def move_forwards(self, delta_z):
         self.set_position(self.position[0], self.position[1], self.position[2] + delta_z)
         
-    def move_sideways(self, delta_x):
-        self.set_position(self.position[0] + delta_x, self.position[1], self.position[2])
+    def rotate(self, degrees):
+        self.rotation += degrees
+        if(self.rotation >= 90):
+            self.rotation = 90
+        elif(self.rotation <= -90):
+            self.rotation = -90
+        
+        motor = self.motors["base"]
+        motor.set_rotation(self.rotation + 90)
+        theta_gamma = self.rotation
+        phi = theta_gamma
+        phi = math.radians(phi)
+        
+        x = self.position[0]
+        z = self.position[2]
+        l_xz = math.sqrt(x**2 + z**2)
+        
+        x = math.sin(phi) * l_xz
+        z = math.cos(phi) * l_xz
+        
+        self.position = [x, self.position[1], z]
         
     def move_upwards(self, delta_y):
         self.set_position(self.position[0], self.position[1] + delta_y, self.position[2])
                 
     def set_position(self, x, y, z):
         y -= 7.5 # offset due to base height
-        if(z < 2.5 or z > 15 or y < -7 or y > 25 or x < 0 or x > 15):
+        if(z < 2.5 or z > 15 or y < -7 or y > 25 or x < -15 or x > 15):
             print("Invalid position")
             return
         
