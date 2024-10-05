@@ -1,5 +1,5 @@
 # FILE: manual_test_robot_arm.py
-from robot import Robot_Arm
+from robot_arm import Robot_Arm
 
 def manual_test_set_position():
     robot_arm = Robot_Arm()
