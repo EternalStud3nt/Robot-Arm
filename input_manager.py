@@ -21,28 +21,28 @@ class InputManager:
         keyboard.on_shift_release.subscribe(self.on_shift_release)
 
     def on_left_arrow_press(self):
-        self.arrow_input[0] -= 1
+        self.arrow_input[0] = -1
 
     def on_right_arrow_press(self):
-        self.arrow_input[0] += 1
+        self.arrow_input[0] = 1
 
     def on_up_arrow_press(self):
-        self.arrow_input[1] += 1
+        self.arrow_input[1] = 1
 
     def on_down_arrow_press(self):
-        self.arrow_input[1] -= 1
+        self.arrow_input[1] = -1
 
     def on_left_arrow_release(self):
-        self.arrow_input[0] += 1
+        self.arrow_input[0] = 0
 
     def on_right_arrow_release(self):
-        self.arrow_input[0] -= 1
+        self.arrow_input[0] = 0
 
     def on_up_arrow_release(self):
-        self.arrow_input[1] -= 1
+        self.arrow_input[1] = 0
 
     def on_down_arrow_release(self):
-        self.arrow_input[1] += 1
+        self.arrow_input[1] = 0
 
     def on_space_press(self):
         self.space_pressed = True
