@@ -6,19 +6,19 @@ class InputManager:
         self.space_pressed = False
         self.shift_pressed = False
         
-        keyboard.on_press_key("left", self.on_left_arrow_press)
-        keyboard.on_press_key("right", self.on_right_arrow_press)
-        keyboard.on_press_key("up", self.on_up_arrow_press)
-        keyboard.on_press_key("down", self.on_down_arrow_press)
-        keyboard.on_press_key("space", self.on_space_press)
-        keyboard.on_press_key("shift", self.on_shift_press)
+        keyboard.on_left_arrow_press.subscribe(self.on_left_arrow_press)
+        keyboard.on_right_arrow_press.subscribe(self.on_right_arrow_press)
+        keyboard.on_up_arrow_press.subscribe(self.on_up_arrow_press)
+        keyboard.on_down_arrow_press.subscribe(self.on_down_arrow_press)
+        keyboard.on_space_press.subscribe(self.on_space_press)
+        keyboard.on_shift_press.subscribe(self.on_shift_press)
 
-        keyboard.on_release_key("left", self.on_left_arrow_release)
-        keyboard.on_release_key("right", self.on_right_arrow_release)
-        keyboard.on_release_key("up", self.on_up_arrow_release)
-        keyboard.on_release_key("down", self.on_down_arrow_release)
-        keyboard.on_release_key("space", self.on_space_release)
-        keyboard.on_release_key("shift", self.on_shift_release)
+        keyboard.on_left_arrow_release.subscribe(self.on_left_arrow_release)
+        keyboard.on_right_arrow_release.subscribe(self.on_right_arrow_release)
+        keyboard.on_up_arrow_release.subscribe(self.on_up_arrow_release)
+        keyboard.on_down_arrow_release.subscribe(self.on_down_arrow_release)
+        keyboard.on_space_release.subscribe(self.on_space_release)
+        keyboard.on_shift_release.subscribe(self.on_shift_release)
 
     def on_left_arrow_press(self):
         self.arrow_input[0] -= 1
