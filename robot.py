@@ -34,7 +34,16 @@ class Robot_Arm:
     def reset_motors(self):
         for motor in self.motors:
             self.motors[motor].set_rotation(90)
-            
+
+    def move_forwards(self, delta_z):
+        self.set_position(self.position[0], self.position[1], self.position[2] + delta_z)
+        
+    def move_sideways(self, delta_x):
+        self.set_position(self.position[0] + delta_x, self.position[1], self.position[2])
+        
+    def move_upwards(self, delta_y):
+        self.set_position(self.position[0], self.position[1] + delta_y, self.position[2])
+                
     def set_position(self, x, y, z):
         y -= 7.5 # offset due to base height
         if(z < 2.5 or z > 15 or y < -7 or y > 25 or x < 0 or x > 15):
