@@ -4,8 +4,8 @@ from robot_arm import RobotArm
 
 class Controller:
     def __init__(self):
-        self.move_speed = 5  # centimeters per second
-        self.rotation_speed = 30 # degrees per second
+        self.move_speed = 8  # centimeters per second
+        self.rotation_speed = 100 # degrees per second
         self.last_time = time.time()
         
         print("Welcome to the controller...")
@@ -13,7 +13,7 @@ class Controller:
         self.robot = RobotArm()
         self.handle_input()
 
-    # Debug function for manual angle input
+    # Debug function for ma  nua           l angle input
     def debug_arm(self):
         while True:
             pulse = input("Enter angle: ")
