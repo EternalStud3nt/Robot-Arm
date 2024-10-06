@@ -21,10 +21,10 @@ class RobotArm:
         }
         
         self.l1 = 8
-        self.reset_motors()
         self.rotation = 0
         self.depth = 8
-        self.height = 15.5
+        self.height = 8
+        self.reset()
         
     def set_rotation(self, angle):
         self.base_motor.set_rotation(angle + 90)
@@ -94,6 +94,6 @@ class RobotArm:
     def reset(self):
         self.set_rotation(0)
         self.set_depth(8)
-        self.set_height(15.5)
+        self.set_height(8)
         
         
