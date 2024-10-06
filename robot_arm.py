@@ -3,7 +3,7 @@ from PCA9685 import PCA9685
 import math
 
 
-class Robot_Arm:
+class RobotArm:
     def __init__(self) -> None:
         pwm = PCA9685(0x40, debug=False)
         pwm.setPWMFreq(50)
@@ -20,77 +20,80 @@ class Robot_Arm:
             "claw": self.claw_motor
         }
         
+        self.l1 = 8
         self.reset_motors()
-        self.position = [0, 15.5, 8]
         self.rotation = 0
+        self.depth = 8
+        self.height = 15.5
         
-    def set_rotation(self, motor, angle):
-        self.motors[motor].set_rotation(angle)
+    def set_rotation(self, angle):
+        self.base_motor.set_rotation(angle + 90)
+        self.rotation = angle
         
-    def set_rotations(self, angles):
-        for motor, angle in zip(["base", "depth", "height"], angles):
-            self.set_rotation(motor, angle)
-            print(motor+"-----"+str(angle))
+    def rotate_by(self, angle):
+        self.set_rotation(self.rotation + angle)
         
-    def reset_motors(self):
-        for motor in self.motors:
-            self.motors[motor].set_rotation(90)
+    def set_depth(self, depth):
+        h = self.height
+        d = depth
+        
+        l = math.sqrt(h**2 + d**2)
+        
+        # theoritical angles in radians
+        theta = math.atan(h/d)
+        phi = math.acos((l/2)/self.l1)
+        a1 = theta + phi
+        a2 = theta - phi
+        
+        theta_depth = math.pi - a1
+        theta_height = math.pi/2 + a2
+        
+        self.depth_motor.set_rotation(math.degrees(theta_depth))
+        self.height_motor.set_rotation(math.degrees(theta_height))
+        self.depth = depth
 
-    def move_forwards(self, delta_z):
-        self.set_position(self.position[0], self.position[1], self.position[2] + delta_z)
+    def move_forwards(self, distance):
+        self.set_depth(self.depth + distance)
         
-    def rotate(self, degrees):
-        self.rotation += degrees
-        if(self.rotation >= 90):
-            self.rotation = 90
-        elif(self.rotation <= -90):
-            self.rotation = -90
+    def set_height(self, height):
+        h = height
+        d = self.depth
         
-        motor = self.motors["base"]
-        motor.set_rotation(self.rotation + 90)
-        theta_gamma = self.rotation
-        phi = theta_gamma
-        phi = math.radians(phi)
+        l = math.sqrt(h**2 + d**2)
         
-        x = self.position[0]
-        z = self.position[2]
-        l_xz = math.sqrt(x**2 + z**2)
+        # theoritical angles in radians
+        theta = math.atan(h/d)
+        phi = math.acos((l/2)/self.l1)
+        a1 = theta + phi
+        a2 = theta - phi
         
-        x = math.sin(phi) * l_xz
-        z = math.cos(phi) * l_xz
+        theta_depth = math.pi - a1
+        theta_height = math.pi/2 + a2
         
-        self.position = [x, self.position[1], z]
-        
-    def move_upwards(self, delta_y):
-        self.set_position(self.position[0], self.position[1] + delta_y, self.position[2])
-                
+        self.depth_motor.set_rotation(math.degrees(theta_depth))
+        self.height_motor.set_rotation(math.degrees(theta_height))
+        self.height = height
+
+    def move_upwards(self, distance):
+        self.set_height(self.height + distance)
+
+    def get_position(self):
+        x = self.depth * math.sin(math.radians(self.rotation))
+        z = self.depth * math.cos(math.radians(self.rotation))
+        y = self.height
+        return (x, y, z)
+    
     def set_position(self, x, y, z):
-        y -= 7.5 # offset due to base height
-        if(z < 2.5 or z > 15 or y < -7 or y > 25 or x < -15 or x > 15):
-            print("Invalid position")
-            return
+        depth = math.sqrt(x**2 + z**2)
+        rotation = math.degrees(math.atan2(x, z))
         
-        l_s = 8
-        l_xz = math.sqrt(x**2 + z**2)
-        l = math.sqrt(l_xz**2 + y**2)
-        
-        theta = math.acos((l/2)/l_s)
-        sigma = math.atan(y/l_xz)
-        phi = 0
-        if x != 0:
-            phi = math.atan(x/z)
-        a1 = sigma + theta
-        a2 = sigma - theta
-        
-        theta_alpha = math.pi - a1
-        theta_beta = math.pi/2 + a2
-        theta_gamma = phi + math.pi/2
-        
-        theta_alpha = math.degrees(theta_alpha)
-        theta_beta = math.degrees(theta_beta)
-        theta_gamma = math.degrees(theta_gamma)
-        
-        self.set_rotations([theta_gamma, theta_alpha, theta_beta])
-        self.position = [x, y + 7.5, z]
+        self.set_rotation(rotation)
+        self.set_depth(depth)
+        self.set_height(y)
+               
+    def reset(self):
+        self.set_rotation(0)
+        self.set_depth(8)
+        self.set_height(15.5)
         
         

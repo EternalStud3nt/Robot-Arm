@@ -1,6 +1,6 @@
 from input_manager import InputManager
 import time
-from robot_arm import Robot_Arm
+from robot_arm import RobotArm
 
 class Controller:
     def __init__(self):
@@ -10,7 +10,7 @@ class Controller:
         
         print("Welcome to the controller...")
         self.input_manager = InputManager()
-        self.robot = Robot_Arm()
+        self.robot = RobotArm()
         self.handle_input()
 
     # Debug function for manual angle input
@@ -32,8 +32,7 @@ class Controller:
                 
                 if(input_x != 0):
                     val = input_x * self.rotation_speed * delta_time
-                    print(input_x)
-                    self.robot.rotate(val)
+                    self.robot.rotate_by(val)
                 if self.input_manager.space_pressed:
                     self.robot.move_upwards(self.move_speed * delta_time)
                 elif self.input_manager.shift_pressed:

@@ -1,8 +1,8 @@
 # FILE: manual_test_robot_arm.py
-from robot_arm import Robot_Arm
+from robot_arm import RobotArm
 
 def manual_test_set_position():
-    robot_arm = Robot_Arm()
+    robot_arm = RobotArm()
     while True:
         x = float(input("Enter x position: "))
         y = float(input("Enter y position: "))
