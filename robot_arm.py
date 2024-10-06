@@ -34,16 +34,20 @@ class RobotArm:
         self.set_rotation(self.rotation + angle)
         
     def set_depth(self, depth):
-        h = self.height
-        d = depth
-        
-        l = math.sqrt(h**2 + d**2)
-        
-        # theoritical angles in radians
-        theta = math.atan(h/d)
-        phi = math.acos((l/2)/self.l1)
-        a1 = theta + phi
-        a2 = theta - phi
+        try:
+            h = self.height
+            d = depth
+            
+            l = math.sqrt(h**2 + d**2)
+            
+            # theoritical angles in radians
+            theta = math.atan(h/d)
+            phi = math.acos((l/2)/self.l1)
+            a1 = theta + phi
+            a2 = theta - phi
+        except ZeroDivisionError:
+            print("It's not possible to reach that depth")
+            return
         
         theta_depth = math.pi - a1
         theta_height = math.pi/2 + a2
@@ -56,16 +60,20 @@ class RobotArm:
         self.set_depth(self.depth + distance)
         
     def set_height(self, height):
-        h = height
-        d = self.depth
-        
-        l = math.sqrt(h**2 + d**2)
-        
-        # theoritical angles in radians
-        theta = math.atan(h/d)
-        phi = math.acos((l/2)/self.l1)
-        a1 = theta + phi
-        a2 = theta - phi
+        try:
+            h = height
+            d = self.depth
+            
+            l = math.sqrt(h**2 + d**2)
+            
+            # theoritical angles in radians
+            theta = math.atan(h/d)
+            phi = math.acos((l/2)/self.l1)
+            a1 = theta + phi
+            a2 = theta - phi
+        except ZeroDivisionError:
+            print("It's not possible to reach that height")
+            return
         
         theta_depth = math.pi - a1
         theta_height = math.pi/2 + a2
