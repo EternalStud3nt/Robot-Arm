@@ -104,8 +104,8 @@ class RobotArm:
         self.set_depth(8)
         self.set_height(8)
         
-        if __name__ == "__main__":
-            arm = RobotArm()
-            arm.reset()
+if __name__ == "__main__":
+    arm = RobotArm()
+    arm.reset()
         
         

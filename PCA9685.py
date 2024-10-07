@@ -104,11 +104,11 @@ if __name__=='__main__':
     # Continuously sweep the servo back and forth
     while True:
         for i in range(500, 2500, 10):  
-            pwm.setServoPulse(0, i)   
+            pwm.setServoPulse(1, i)   
             time.sleep(0.02)     
         
         for i in range(2500, 500, -10):
-            pwm.setServoPulse(0, i) 
+            pwm.setServoPulse(1, i) 
             time.sleep(0.02)
          
          
