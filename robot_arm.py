@@ -9,9 +9,14 @@ class RobotArm:
         pwm.setPWMFreq(50)
         
         self.base_motor = Motor(0, pwm) # base motor
-        self.depth_motor = Motor(1, pwm) # depth arm motor
-        self.height_motor = Motor(2, pwm) # height arm motor
-        self.claw_motor = Motor(3, pwm) # claw motor
+        self.depth_motor = Motor(8, pwm) # depth arm motor
+        self.height_motor = Motor(4, pwm) # height arm motor
+        self.claw_motor = Motor(12, pwm) # claw motor
+        
+        self.max_d_motor_rotation = 170
+        self.max_h_motor_rotation = 135
+        self.min_h_motor_rotation = 10
+        self.min_d_motor_rotation = 5
         
         self.motors = {
             "base": self.base_motor,
@@ -42,7 +47,7 @@ class RobotArm:
         self.motors[motor_id].set_rotation(angle)
         
     def set_depth(self, depth):
-        if(depth > 15 or depth < 3 or self.height > 15 or self.height < -5):
+        if(depth > 15 or depth < 4 or self.height > 15 or self.height < -5):
             return
         
         try:
@@ -66,15 +71,15 @@ class RobotArm:
         theta_depth_deg = math.degrees(theta_depth)
         theta_height_deg = math.degrees(theta_height)
         
+        if(theta_depth_deg < self.min_d_motor_rotation or theta_depth_deg > self.max_d_motor_rotation):
+            print("Impossible to reach that position")
+            return
+        elif(theta_height_deg < self.min_h_motor_rotation or theta_height_deg > self.max_h_motor_rotation):
+            print("Impossible to reach that position")
+            return
+        
         self.depth_motor.set_rotation(theta_depth_deg)
         self.height_motor.set_rotation(theta_height_deg)
-        
-        if(theta_depth_deg < 0 or theta_depth > 180):
-            print("Impossible to reach that position")
-            return
-        elif(theta_height_deg < 20 or theta_height_deg > 160):
-            print("Impossible to reach that position")
-            return
         
         print("height: " + str(math.degrees(theta_height)))
         print("depth: " + str(math.degrees(theta_depth)))
@@ -84,7 +89,7 @@ class RobotArm:
         self.set_depth(self.depth + distance)
         
     def set_height(self, height):
-        if(self.depth > 15 or self.depth < 3 or height > 15 or height < -5):
+        if(self.depth > 15 or self.depth < 4 or height > 15 or height < -5):
             return
         
         try:
@@ -98,7 +103,7 @@ class RobotArm:
             phi = math.acos((l/2)/self.l1)
             a1 = theta + phi
             a2 = theta - phi
-        except ZeroDivisionError:
+        except:
             print("It's not possible to reach that height")
             return
         
@@ -108,16 +113,17 @@ class RobotArm:
         theta_depth_deg = math.degrees(theta_depth)
         theta_height_deg = math.degrees(theta_height)
         
+        
+        
+        if(theta_depth_deg < self.min_d_motor_rotation or theta_depth_deg > self.max_d_motor_rotation):
+            print("Impossible to reach that position")
+            return
+        elif(theta_height_deg < self.min_h_motor_rotation or theta_height_deg > self.max_h_motor_rotation):
+            print("Impossible to reach that position")
+            return
+        
         self.depth_motor.set_rotation(theta_depth_deg)
         self.height_motor.set_rotation(theta_height_deg)
-        
-        if(theta_depth_deg < 0 or theta_depth > 180):
-            print("Impossible to reach that position")
-            return
-        elif(theta_height_deg < 20 or theta_height_deg > 160):
-            print("Impossible to reach that position")
-            return
-        
         print("height: " + str(math.degrees(theta_height)))
         print("depth: " + str(math.degrees(theta_depth)))
         

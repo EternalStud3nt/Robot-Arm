@@ -34,14 +34,12 @@ class Controller:
                 if self.input_manager.space_pressed:
                     self.robot.move_upwards(self.move_speed * delta_time)
                 elif self.input_manager.shift_pressed:
-                    self.robot.move_upwards(- self.move_speed * delta_time)
+                                                                       self.robot.move_upwards(- self.move_speed * delta_time)
                 if(input_y != 0):
                     self.robot.move_forwards(input_y * self.move_speed * delta_time)
                 
                 
-                
-                
-                time.sleep(0.01)  # Small delay to avoid h    igh CPU usage
+                time.sleep(0.005)  # Small delay to avoid h    igh CPU usage
                 self.last_time = current_time  # Update the last_time
 
         except KeyboardInterrupt:
@@ -49,10 +47,10 @@ class Controller:
 
 if __name__ == "__main__":
     controller = Controller()
-#     robot.reset()
+#      robot.reset()
 #     while True:
 #         channel = input("input channel:  ")
 #         angle = input("input angle: ")
 #         angle = int(angle)
 #         robot.set_motor_rotation(channel, angle)
-      
+                       
