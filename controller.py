@@ -1,24 +1,22 @@
 from input_manager import InputManager
 import time
-from robot_arm import RobotArm
-
+from robot_arm import RobotArm 
+        
 class Controller:
     def __init__(self):
         self.move_speed = 8  # centimeters per second
-        self.rotation_speed = 100 # degrees per second
+        self.rotation_speed = 100 # degrees per second         
         self.last_time = time.time()
         
         print("Welcome to the controller...")
         self.input_manager = InputManager()
         self.robot = RobotArm()
-        self.handle_input()
+        self.handle_input()   
 
-    # Debug function for ma  nua           l angle input
-    def debug_arm(self):
+    def debug_arm(self, robot):
         while True:
             pulse = input("Enter angle: ")
             pulse = int(pulse)
-            self.motor_2.set_rotation(pulse)
 
     # Handle the input from the keyboard
     def handle_input(self):
@@ -49,5 +47,12 @@ class Controller:
         except KeyboardInterrupt:
             print("\nController stopped.")
 
-if __name__ == "__main__":                                             
-    controller = Controller()  
+if __name__ == "__main__":
+    controller = Controller()
+#     robot.reset()
+#     while True:
+#         channel = input("input channel:  ")
+#         angle = input("input angle: ")
+#         angle = int(angle)
+#         robot.set_motor_rotation(channel, angle)
+      
