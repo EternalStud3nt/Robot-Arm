@@ -29,6 +29,7 @@ class RobotArm:
         self.rotation = 0
         self.depth = 8
         self.height = 8
+        self.grip = 50
         self.reset()
         
     def set_rotation(self, angle):
@@ -145,6 +146,13 @@ class RobotArm:
         self.set_rotation(rotation)
         self.set_depth(depth)
         self.set_height(y)
+        
+    def set_grip(self, grip):
+        angle = 100 - grip * 180 / 100
+        self.claw_motor.set_rotation(angle)
+        
+    def change_grip(self, delta_grip):
+        self.set_grip(self.grip + delta_grip)
                
     def reset(self):
         self.set_rotation(0)

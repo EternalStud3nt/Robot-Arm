@@ -8,6 +8,8 @@ on_up_arrow_press = Event()
 on_down_arrow_press = Event()
 on_space_press = Event()
 on_shift_press = Event()
+on_z_press = Event()
+on_x_press = Event()
 
 on_left_arrow_release = Event()
 on_right_arrow_release = Event()
@@ -15,6 +17,8 @@ on_up_arrow_release = Event()
 on_down_arrow_release = Event()
 on_space_release = Event()
 on_shift_release = Event()
+on_z_release = Event()
+on_x_release = Event()
 
 def on_press(key):
     if key == keyboard.Key.left:
@@ -29,6 +33,10 @@ def on_press(key):
         on_space_press.invoke()
     elif key == keyboard.Key.shift:
         on_shift_press.invoke()
+    elif key.char == 'z':
+        on_z_press.invoke()
+    elif key.char == 'x':
+        on_x_press.invoke()
 
 def on_release(key):
     if key == keyboard.Key.left:
@@ -43,6 +51,10 @@ def on_release(key):
         on_space_release.invoke()
     elif key == keyboard.Key.shift:
         on_shift_release.invoke()
+    elif key.char == 'z':
+        on_z_release.invoke()
+    elif key.char == 'x':
+        on_x_release.invoke()
 
 listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 listener.start()

@@ -5,6 +5,7 @@ from robot_arm import RobotArm
 class Controller:
     def __init__(self):
         self.move_speed = 8  # centimeters per second
+        self.grip_speed = 50  # degrees per second
         self.rotation_speed = 100 # degrees per second         
         self.last_time = time.time()
         
@@ -28,15 +29,25 @@ class Controller:
                 input_x = input[0]
                 input_y = input[1]
                 
+                # Rotate the robot
                 if(input_x != 0):
                     val = input_x * self.rotation_speed * delta_time
                     self.robot.rotate_by(val)
+                    
+                # Move the robot up or down
                 if self.input_manager.space_pressed:
                     self.robot.move_upwards(self.move_speed * delta_time)
                 elif self.input_manager.shift_pressed:
-                                                                       self.robot.move_upwards(- self.move_speed * delta_time)
+                    self.robot.move_upwards(- self.move_speed * delta_time)
+                    
+                # Move the robot forwards or backwards
                 if(input_y != 0):
                     self.robot.move_forwards(input_y * self.move_speed * delta_time)
+                    
+                if(self.input_manager.z_pressed):
+                    self.robot.change_grip(self.grip_speed * delta_time)
+                elif(self.input_manager.x_pressed):
+                    self.robot.change_grip(-self.grip_speed * delta_time)
                 
                 
                 time.sleep(0.005)  # Small delay to avoid h    igh CPU usage
