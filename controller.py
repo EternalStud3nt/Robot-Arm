@@ -1,11 +1,11 @@
 from input_manager import InputManager
-import time
+import time      
 from robot_arm import RobotArm 
         
 class Controller:
     def __init__(self):
-        self.move_speed = 8  # centimeters per second
-        self.grip_speed = 50  # degrees per second
+        self.move_speed = 6  # centimeters per second
+        self.grip_speed = 40  # degrees per second
         self.rotation_speed = 100 # degrees per second         
         self.last_time = time.time()
         
@@ -55,7 +55,7 @@ class Controller:
 
         except KeyboardInterrupt:
             print("\nController stopped.")
-
+                                            
 if __name__ == "__main__":
     controller = Controller()
 #      robot.reset()
@@ -64,4 +64,4 @@ if __name__ == "__main__":
 #         angle = input("input angle: ")
 #         angle = int(angle)
 #         robot.set_motor_rotation(channel, angle)
-                       
+                               

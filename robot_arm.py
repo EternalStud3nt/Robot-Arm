@@ -14,7 +14,7 @@ class RobotArm:
         self.claw_motor = Motor(12, pwm) # claw motor
         
         self.max_d_motor_rotation = 170
-        self.max_h_motor_rotation = 135
+        self.max_h_motor_rotation = 110
         self.min_h_motor_rotation = 10
         self.min_d_motor_rotation = 5
         
@@ -29,7 +29,7 @@ class RobotArm:
         self.rotation = 0
         self.depth = 8
         self.height = 8
-        self.grip = 50
+        self.grip = 90
         self.reset()
         
     def set_rotation(self, angle):
@@ -148,8 +148,13 @@ class RobotArm:
         self.set_height(y)
         
     def set_grip(self, grip):
-        angle = 100 - grip * 180 / 100
+        if grip < 4: grip  = 4
+        elif grip > 90: grip = 90
+        
+        angle = grip * 180 / 100
         self.claw_motor.set_rotation(angle)
+        self.grip = grip
+        print(grip)
         
     def change_grip(self, delta_grip):
         self.set_grip(self.grip + delta_grip)
@@ -158,6 +163,7 @@ class RobotArm:
         self.set_rotation(0)
         self.set_depth(8)
         self.set_height(8)
+        self.set_grip(90)
         
 if __name__ == "__main__":
     arm = RobotArm()
