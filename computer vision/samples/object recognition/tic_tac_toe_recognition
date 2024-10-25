@@ -1,0 +1,30 @@
+import numpy as np
+import cv2
+
+img = cv2.imread('computer vision/samples/object recognition/tic-tac-toe.jpg')
+template = cv2.imread('computer vision/samples/object recognition/x.png')
+
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+
+w, h = template_gray.shape
+
+# All the 6 methods for comparison in a list
+# TM_CCORR is the worst method for this case, it could not find the template
+methods = [cv2.TM_CCOEFF, cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR, cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]
+
+for method in methods:
+    img2 = img.copy()
+    
+    result = cv2.matchTemplate(img_gray, template_gray, method)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+    
+    if(method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]):
+        top_left = min_loc
+    else:
+        top_left = max_loc
+        
+    cv2.rectangle(img2, top_left, (top_left[0] + w, top_left[1] + h), (0, 255, 0), 2)
+    cv2.imshow('Match', img2)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
