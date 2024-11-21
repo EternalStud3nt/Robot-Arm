@@ -1,5 +1,4 @@
 # Ignore everything in the train_the_model folder
-Trained Model/*
+ML Data/*
 
-# But do not ignore the best.pt file
-!Trained Model/runs/detect/train/weights/*
+!ML Data/best.pt
