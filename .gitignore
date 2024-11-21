@@ -1,0 +1,5 @@
+# Ignore everything in the train_the_model folder
+train_the_model/*
+
+# But do not ignore the best.pt file
+!train_the_model/best.pt
