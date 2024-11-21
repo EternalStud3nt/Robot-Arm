@@ -2,4 +2,4 @@
 Trained Model/*
 
 # But do not ignore the best.pt file
-!Trained Model/best.pt
+!Trained Model/runs/detect/train/weights/best.pt
