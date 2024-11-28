@@ -1,48 +1,55 @@
 import cv2
+from ultralytics import YOLO
 import numpy as np
 from camera import Camera
-from tic_tac_toe.grid import Grid
 
 class ImageProcessor:
     def __init__(self):
         self.camera = Camera()
-        self.grid = Grid()
 
-    def process_image(self, image):
-        # Convert the image to grayscale
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # Apply thresholding to get a binary image
-        _, thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)
-        # Find contours in the image
-        contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        
-        # Assume the grid is a 3x3 grid and each cell is a square
-        cell_size = image.shape[0] // 3
-        
-        for i in range(3):
-            for j in range(3):
-                # Extract the cell from the image
-                cell = thresh[i*cell_size:(i+1)*cell_size, j*cell_size:(j+1)*cell_size]
-                # Check if the cell contains an 'X' or 'O'
-                if self.contains_symbol(cell, 'X'):
-                    self.grid.draw(i, j, 'X')
-                elif self.contains_symbol(cell, 'O'):
-                    self.grid.draw(i, j, 'O')
+    def draw_objects(self, img):
+        # Load the YOLO model
+        model = YOLO("../ML Data/best.pt")
 
-    def contains_symbol(self, cell, symbol):
-        # This is a placeholder function. You need to implement symbol recognition logic here.
-        # For simplicity, let's assume it returns False for now.
-        return False
+        # Define colors for each class
+        class_colors = {
+            0: (255, 0, 0),  # Red
+            1: (0, 255, 0),  # Green
+            2: (0, 0, 255),  # Blue
+            # Add more colors as needed
+        }
 
-    def run(self):
-        # Capture a photo from the camera
-        ret, frame = self.camera.camera.read()
-        if ret:
-            self.process_image(frame)
-        else:
-            print("Error: Could not capture photo.")
-        self.camera.release()
+        # Detect objects in the image
+        results = model.predict(source=img, conf=0.25, save=False)
+
+        # Iterate through detected objects
+        for result in results[0].boxes:
+            # Get bounding box coordinates
+            x1, y1, x2, y2 = map(int, result.xyxy[0])
+            confidence = result.conf[0]
+            
+            # Get the class id
+            class_id = int(result.cls[0])
+            # Get the color for the class
+            color = class_colors.get(class_id, (255, 255, 255))  # Default to white if class_id not found
+
+            # Draw the bounding box with the class-specific color
+            cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+            # Put the label above the bounding box with the class-specific color
+            label = f"{class_id} {confidence:.2f}"
+            cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
+            
+        # Show the image
+        cv2.imshow("Image", img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+                        
+            
 
 if __name__ == "__main__":
+    #camera = Camera()
+    #img = camera.capture_photo()
+    #get the image from the same of the script named test.jpg
+    img = cv2.imread("test.jpg")
     processor = ImageProcessor()
-    processor.run()
+    processor.draw_objects(img)

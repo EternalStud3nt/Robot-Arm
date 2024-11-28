@@ -1,4 +1,7 @@
 # Ignore everything in the train_the_model folder
 ML Data/*
 
+# Ignore the data folder
+data/
+
 !ML Data/best.pt
