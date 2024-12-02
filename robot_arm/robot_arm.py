@@ -1,5 +1,5 @@
-from motor import Motor
-from PCA9685 import PCA9685
+from robot_arm.motor import Motor
+from robot_arm.PCA9685 import PCA9685
 import math
 import time
 
@@ -18,6 +18,7 @@ class RobotArm:
         self.max_h_motor_rotation = 110
         self.min_h_motor_rotation = 10
         self.min_d_motor_rotation = 5
+        self.min_grip = 15
         
         self.motors = {
             "base": self.base_motor,
@@ -149,7 +150,7 @@ class RobotArm:
         self.set_height(y)
         
     def set_grip(self, grip):
-        if grip < 4: grip  = 4
+        if grip < self.min_grip: grip = self.min_grip
         elif grip > 90: grip = 90
         
         angle = grip * 180 / 100

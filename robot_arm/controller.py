@@ -1,6 +1,6 @@
-from input_manager import InputManager
+from input.input_manager import InputManager
 import time      
-from robot_arm import RobotArm 
+from robot_arm.robot_arm import RobotArm 
         
 class Controller:
     def __init__(self):

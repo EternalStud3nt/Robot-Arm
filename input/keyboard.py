@@ -1,6 +1,6 @@
 import time
 from pynput import keyboard
-from event import Event 
+from input.event import Event 
 
 on_left_arrow_press = Event()
 on_right_arrow_press = Event()

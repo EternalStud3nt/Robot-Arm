@@ -1,4 +1,4 @@
-from PCA9685 import PCA9685
+from robot_arm.PCA9685 import PCA9685
 import conversions
 
 class Motor:

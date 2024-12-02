@@ -1,4 +1,4 @@
-import keyboard
+import input.keyboard as keyboard
 
 class InputManager:
     def __init__(self):
