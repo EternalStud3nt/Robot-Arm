@@ -4,13 +4,17 @@ class Grid:
     def __init__(self):
         # Create a 3x3 grid filled with empty spaces
         self.on_winner_detected = Event()
+        self.on_turn_end = Event()
         self.cells = [[' ' for _ in range(3)] for _ in range(3)]
 
     def draw(self, row, col, symbol):
         if symbol not in ['X', 'O']:
             raise ValueError("Symbol must be 'X' or 'O'")
         self.cells[row][col] = symbol
-        self.check_for_winner()
+        print(f"A player placed {symbol} at ({row}, {col})...")
+        
+        self.check_for_winner(True)
+        self.on_turn_end.invoke()
         
     def check_for_winner(self, notify=False):
         # Check rows for a winner
@@ -31,9 +35,18 @@ class Grid:
         if self.cells[0][2] == self.cells[1][1] == self.cells[2][0] and self.cells[0][2] != ' ':
             winner = self.cells[0][2]
         
+        if notify:
+            if winner or self.is_grid_full():
+                self.on_winner_detected.invoke(winner)
+            
         if winner:
-            if notify:
-                self.on_winner_detected(winner)
             return True
         else:
             return False
+        
+    def is_grid_full(self):
+        for row in self.cells:
+            for cell in row:
+                if cell == ' ':
+                    return False
+        return True

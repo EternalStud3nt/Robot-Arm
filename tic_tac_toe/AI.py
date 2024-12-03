@@ -1,9 +1,9 @@
-from player import Player
+from tic_tac_toe.player import Player
 import random
 
 class AI(Player):
-    def __init__(self, symbol, grid):
-        super().__init__(symbol, grid)
+    def __init__(self, id, game_manager, grid):
+        super().__init__(id, game_manager, grid)
 
     def calculate_next_move(self):
         # Check if AI can win in the next move
@@ -35,3 +35,7 @@ class AI(Player):
         
         random_cell = random.choice(empty_cells)
         return random_cell
+    
+    def move(self):
+        row, col = self.calculate_next_move()
+        self.draw(row, col)
