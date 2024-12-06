@@ -10,8 +10,8 @@ class AI(Player):
         
         self.arm = RobotArm()
         self.grab_index = 0
-        self.grab_positions = [[9,36, -4.09, -44.42], [13.03, -4.39, -42.40], [9.09, -3.96, 54.40, 40.10], [12.34, -3.84, 48.79, 33.15]]
-        self.grid_positions = [
+        self.grab_coordinates = [[9,36, -4.09, -44.42], [13.03, -4.39, -42.40], [9.09, -3.96, 54.40, 40.10], [12.34, -3.84, 48.79, 33.15]]
+        self.grid_cell_coordinates = [
             # Lower row
             [[8.90, -3.57, 19.27], [8.35, -3.11, 2.59], [9.29, -3.30, -13.30]],
             # Middle row
@@ -56,7 +56,7 @@ class AI(Player):
         self.draw(row, col)
         
     def grab_piece(self):
-        grab_position = self.grab_positions[self.grab_index]
+        grab_position = self.grab_coordinates[self.grab_index]
         
         # Open the grip, move to the grab position with a height offset, close the grip and lift the piece
         self.arm.set_grip(70)
@@ -78,13 +78,13 @@ class AI(Player):
         for row in range(3):
             for col in range(3):
                 self.grab_piece()
-                grid_position = self.grid_positions[row][col]
+                grid_position = self.grid_cell_coordinates[row][col]
                 self.arm.set_position(grid_position[0], grid_position[1] + 2, grid_position[2])
                 time.sleep(0.2)
                 self.arm.set_position(grid_position[0], grid_position[1], grid_position[2])
                 time.sleep(0.5)
                 self.release_piece()
                 self.arm.move_upwards(3)
-                self.grab_index = (self.grab_index + 1) % len(self.grab_positions)
+                self.grab_index = (self.grab_index + 1) % len(self.grab_coordinates)
                 
         
