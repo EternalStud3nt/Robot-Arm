@@ -5,7 +5,7 @@ class HumanPlayer(Player):
     def __init__(self,id, game_manager, grid):
         super().__init__(id, game_manager, grid)
 
-    def move(self):
+    def make_move(self):
         while True:
             try:
                 row, col = map(int, input(f"Enter your move (row,col): ").split(','))

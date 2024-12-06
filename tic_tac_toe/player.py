@@ -20,7 +20,7 @@ class Player:
         
     def on_move_requested(self, player_turn):
         if player_turn == self.id:
-            self.move()
+            self.make_move()
 
-    def move(self):
+    def make_move(self):
         raise NotImplementedError("Subclasses should implement this method.")

@@ -2,7 +2,7 @@ from input.input_manager import InputManager
 import time      
 from robot_arm.robot_arm import RobotArm 
         
-class Controller:
+class ArmController:
     def __init__(self):
         self.move_speed = 6  # centimeters per second
         self.grip_speed = 40  # degrees per second
@@ -57,7 +57,7 @@ class Controller:
             print("\nController stopped.")
                                             
 if __name__ == "__main__":
-    controller = Controller()
+    controller = ArmController()
 #      robot.reset()
 #     while True:
 #         channel = input("input channel:  ")
