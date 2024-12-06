@@ -4,10 +4,13 @@ from tic_tac_toe.game_manager import GameManager
 from robot_arm.arm_controller import ArmController
 
 if __name__ == "__main__":
-    controller = ArmController()
-    # grid = Grid()
-    # game_manager = GameManager()
-    # ai = AI(1, game_manager, grid)
+    grid = Grid()
+    game_manager = GameManager()
+    ai = AI(1, game_manager, grid)
+    ai.test_set_positions()
+    
+    # controller = ArmController()
+    
     
     # ai.grab_piece()
     # from robot_arm.arm_controller import ArmController  
