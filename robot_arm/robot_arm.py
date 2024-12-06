@@ -143,13 +143,10 @@ class RobotArm:
         y = self.height
         return (x, y, z)
     
-    def set_position(self, x, y, z):
-        depth = math.sqrt(x**2 + z**2)
-        rotation = math.degrees(math.atan2(x, z))
-        
-        self.set_rotation_xz(rotation)
+    def set_position(self, height, depth, rotation):
+        self.set_height(height)
         self.set_depth(depth)
-        self.set_height(y)
+        self.set_rotation_xz(rotation)
         
     def set_grip(self, grip):
         if grip < self.min_grip: grip = self.min_grip
