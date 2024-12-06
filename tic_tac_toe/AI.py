@@ -13,11 +13,11 @@ class AI(Player):
         self.grab_coordinates = [[9.36, -4.09, -42.42], [13.03, -4.39, -40.40], [9.09, -3.96, 56.40], [12.34, -3.84, 50.79]]
         self.grid_cell_coordinates = [
             # Lower row
-            [[9.90, -3.57, 21.62], [9.35, -3.11, 4.94], [10.29, -3.30, -10.95]],
+            [[8.90, -3.57, 23.27], [8.35, -3.11, 6.59], [9.29, -3.30, -9.30]],
             # Middle row
-            [[11.28, -3.20, 19.78], [11.89, -3.56, 7.12], [11.90, -3.30, -7.22]],
+            [[10.28, -3.20, 21.43], [10.89, -3.56, 8.77], [10.90, -3.30, -5.57]],
             # Upper row
-            [[14.65, -3.63, 17.84], [13.08, -3.35, 3.74], [14.78, -3.39, -7.54]]
+            [[13.65, -3.63, 19.49], [12.08, -3.35, 5.39], [13.78, -3.39, -5.89]]
         ]
 
     def make_move(self):
@@ -61,7 +61,7 @@ class AI(Player):
         # Open the grip, move to the grab position with a height offset, close the grip and lift the piece
         self.arm.set_grip(70)
         time.sleep(1)
-        self.arm.set_position(grab_position[0] - 1, grab_position[1] + 3, grab_position[2])
+        self.arm.set_position(grab_position[0]-0.5, grab_position[1] + 3, grab_position[2])
         time.sleep(1)
         self.arm.set_position(grab_position[0], grab_position[1], grab_position[2])
         time.sleep(1)
