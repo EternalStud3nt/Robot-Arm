@@ -6,22 +6,22 @@ from robot_arm.robot_arm import RobotArm
 
 if __name__ == "__main__":
     #controller = ArmController()
-    arm = RobotArm()
-    while True:
-        try:
-            depth = float(input("Enter depth: "))
-            height = float(input("Enter height: "))
-            rotation = float(input("Enter base rotation: "))
-        except ValueError:
-            print("Invalid input. Please enter numeric values.")
-        else:
-            arm.set_depth(depth)
-            arm.set_height(height)
-            arm.set_rotation_xz(rotation)
-#     grid = Grid()
-#     game_manager = GameManager()
-#     ai = AI(1, game_manager, grid)
-#     ai.test_set_positions()
+#     arm = RobotArm()
+#     while True:
+#         try:
+#             depth = float(input("Enter depth: "))
+#             height = float(input("Enter height: "))
+#             rotation = float(input("Enter base rotation: "))
+#         except ValueError:
+#             print("Invalid input. Please enter numeric values.")
+#         else:
+#             arm.set_depth(depth)
+#             arm.set_height(height)
+#             arm.set_rotation_xz(rotation)
+    grid = Grid()
+    game_manager = GameManager()
+    ai = AI(1, game_manager, grid)
+    ai.test_set_positions()
 #     
 
     
