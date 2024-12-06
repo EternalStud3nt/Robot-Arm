@@ -10,8 +10,15 @@ class AI(Player):
         
         self.arm = RobotArm()
         self.grab_index = 0
-        self.grap_positions = [[0, 0, 0]]
-        self.grid_positions = [[1, 1, 1]]
+        self.grab_positions = [[9,36, -4.09, -44.42], [13.03, -4.39, -42.40], [9.09, -3.96, 54.40, 40.10], [12.34, -3.84, 48.79, 33.15]]
+        self.grid_positions = [
+            # Lower row
+            [[8.90, -3.57, 19.27], [8.35, -3.11, 2.59], [9.29, -3.30, -13.30]],
+            # Middle row
+            [[10.28, -3.20, 17.43], [10.89, -3.56, 4.77], [10.90, -3.30, -9.57]],
+            # Upper row
+            [[13.65, -3.63, 15.49], [12.08, -3.35, 1.39], [13.78, -3.39, -9.84]]
+        ]
 
     def make_move(self):
         def calculate_next_move():
@@ -62,4 +69,22 @@ class AI(Player):
         time.sleep(0.5)
         self.arm.set_grip(30)
         self.arm.move_upwards(3)
+        
+    def release_piece(self):
+        self.arm.set_grip(40)
+        
+        
+    def test_set_positions(self):
+        for row in range(3):
+            for col in range(3):
+                self.grab_piece()
+                grid_position = self.grid_positions[row][col]
+                self.arm.set_position(grid_position[0], grid_position[1] + 2, grid_position[2])
+                time.sleep(0.2)
+                self.arm.set_position(grid_position[0], grid_position[1], grid_position[2])
+                time.sleep(0.5)
+                self.release_piece()
+                self.arm.move_upwards(3)
+                self.grab_index = (self.grab_index + 1) % len(self.grab_positions)
+                
         
