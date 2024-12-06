@@ -10,7 +10,7 @@ class AI(Player):
         
         self.arm = RobotArm()
         self.grab_index = 0
-        self.grab_coordinates = [[9, -4, -42.42], [13.03, -4.39, -40.40], [9, 4, 56.40], [12.34, -3.84, 50.79]]
+        self.grab_coordinates = [[9, -4, -42.42], [13.03, -4, -40.40], [9, -4, 56.40], [12.34, -4, 50.79]]
         self.grid_cell_coordinates = [
             # Lower row
             [[8.90, -3.57, 23.27], [8.35, -3.11, 6.59], [9.29, -3.30, -9.30]],
