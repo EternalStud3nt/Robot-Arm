@@ -34,7 +34,7 @@ class RobotArm:
         self.grip = 90
         self.reset()
         
-    def set_rotation(self, angle):
+    def set_rotation_xz(self, angle):
         new_angle = angle + 90
         
         if not(new_angle >= 0 and new_angle <= 180):
@@ -42,9 +42,10 @@ class RobotArm:
         
         self.base_motor.set_rotation(angle + 90)
         self.rotation = angle
+        print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
         
-    def rotate_by(self, angle):
-        self.set_rotation(self.rotation + angle)
+    def rotate_by_xz(self, angle):
+        self.set_rotation_xz(self.rotation + angle)
         
     def set_motor_rotation(self, motor_id, angle):
         self.motors[motor_id].set_rotation(angle)
@@ -74,6 +75,8 @@ class RobotArm:
         theta_depth_deg = math.degrees(theta_depth)
         theta_height_deg = math.degrees(theta_height)
         
+        
+        
         if(theta_depth_deg < self.min_d_motor_rotation or theta_depth_deg > self.max_d_motor_rotation):
             print("Impossible to reach that position")
             return
@@ -84,9 +87,9 @@ class RobotArm:
         self.depth_motor.set_rotation(theta_depth_deg)
         self.height_motor.set_rotation(theta_height_deg)
         
-        print("height: " + str(math.degrees(theta_height)))
-        print("depth: " + str(math.degrees(theta_depth)))
+        
         self.depth = depth
+        print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
 
     def move_forwards(self, distance):
         self.set_depth(self.depth + distance)
@@ -127,10 +130,9 @@ class RobotArm:
         
         self.depth_motor.set_rotation(theta_depth_deg)
         self.height_motor.set_rotation(theta_height_deg)
-        print("height: " + str(math.degrees(theta_height)))
-        print("depth: " + str(math.degrees(theta_depth)))
         
         self.height = height
+        print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
 
     def move_upwards(self, distance):
         self.set_height(self.height + distance)
@@ -145,7 +147,7 @@ class RobotArm:
         depth = math.sqrt(x**2 + z**2)
         rotation = math.degrees(math.atan2(x, z))
         
-        self.set_rotation(rotation)
+        self.set_rotation_xz(rotation)
         self.set_depth(depth)
         self.set_height(y)
         

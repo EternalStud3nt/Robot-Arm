@@ -32,7 +32,7 @@ class ArmController:
                 # Rotate the robot
                 if(input_x != 0):
                     val = input_x * self.rotation_speed * delta_time
-                    self.robot.rotate_by(val)
+                    self.robot.rotate_by_xz(val)
                     
                 # Move the robot up or down
                 if self.input_manager.space_pressed:
