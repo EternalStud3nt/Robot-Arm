@@ -13,11 +13,11 @@ class AI(Player):
         self.grab_coordinates = [[9.36, -4.09, -42.42], [13.03, -4.39, -40.40], [9.09, -3.96, 56.40], [12.34, -3.84, 50.79]]
         self.grid_cell_coordinates = [
             # Lower row
-            [[8.90, -3.57, 21.27], [8.35, -3.11, 4.59], [9.29, -3.30, -11.30]],
+            [[8.90, -3.57, 23.27], [8.35, -3.11, 6.59], [9.29, -3.30, -9.30]],
             # Middle row
-            [[10.28, -3.20, 19.43], [10.89, -3.56, 6.77], [10.90, -3.30, -7.57]],
+            [[10.28, -3.20, 21.43], [10.89, -3.56, 8.77], [10.90, -3.30, -5.57]],
             # Upper row
-            [[13.65, -3.63, 17.49], [12.08, -3.35, 3.39], [13.78, -3.39, -7.89]]
+            [[13.65, -3.63, 19.49], [12.08, -3.35, 5.39], [13.78, -3.39, -5.89]]
         ]
 
     def make_move(self):
@@ -78,15 +78,25 @@ class AI(Player):
     def test_set_positions(self):
         for row in range(3):
             for col in range(3):
+                # grab a piece
                 self.grab_piece()
+                
+                # move above the grid cell
                 grid_position = self.grid_cell_coordinates[row][col]
                 self.arm.set_position(grid_position[0], grid_position[1] + 2, grid_position[2])
                 time.sleep(1)
-                self.arm.set_position(grid_position[0], grid_position[1]+0.5, grid_position[2])
+                
+                # move down to the grid cell
+                self.arm.set_position(grid_position[0], grid_position[1], grid_position[2])
                 time.sleep(1)
+                
+                # release the piece
                 self.release_piece()
                 time.sleep(1)
+                
+                # move up
                 self.arm.move_upwards(3)
+                
                 self.grab_index = (self.grab_index + 1) % len(self.grab_coordinates)
                 
         
