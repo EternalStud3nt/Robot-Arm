@@ -143,7 +143,7 @@ class RobotArm:
         y = self.height
         return (x, y, z)
     
-    def set_position(self, height, depth, rotation):
+    def set_position(self, depth, height, rotation):
         self.set_height(height)
         self.set_depth(depth)
         self.set_rotation_xz(rotation)
