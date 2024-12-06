@@ -158,6 +158,7 @@ class RobotArm:
         angle = grip * 180 / 100
         self.claw_motor.set_rotation(angle)
         self.grip = grip
+        print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
         
     def change_grip(self, delta_grip):
         self.set_grip(self.grip + delta_grip)
