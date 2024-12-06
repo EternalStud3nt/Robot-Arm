@@ -17,7 +17,7 @@ class AI(Player):
             # Middle row
             [[13.28, -3.20, 19.13], [13.89, -3.56, 6.47], [13.90, -3.30, -7.87]],
             # Upper row
-            [[16.65, -3.63, 17.19], [15.08, -3.35, 3.09], [16.78, -3.39, -8.19]]
+            [[16.65, -3.63, 17.19], [15.08, -3.35, 6.5], [16.78, -3.39, -6.8]]
         ]
 
     def make_move(self):
@@ -61,11 +61,9 @@ class AI(Player):
         # Open the grip, move to the grab position with a height offset, close the grip and lift the piece
         self.arm.set_grip(70)
         time.sleep(1)
-        self.arm.set_position(grab_position[0] - 1, grab_position[1] + 2, grab_position[2])
+        self.arm.set_position(grab_position[0], grab_position[1] + 2, grab_position[2])
         time.sleep(1)
         self.arm.set_position(grab_position[0], grab_position[1], grab_position[2])
-        time.sleep(1)
-        self.arm.move_forwards(1)
         time.sleep(1)
         self.arm.set_grip(30)
         time.sleep(1.5)
