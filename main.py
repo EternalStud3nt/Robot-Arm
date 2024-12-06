@@ -5,8 +5,8 @@ from robot_arm.arm_controller import ArmController
 from robot_arm.robot_arm import RobotArm
 
 if __name__ == "__main__":
+    #controller = ArmController()
     arm = RobotArm()
-    
     while True:
         try:
             depth = float(input("Enter depth: "))
@@ -22,6 +22,8 @@ if __name__ == "__main__":
 #     game_manager = GameManager()
 #     ai = AI(1, game_manager, grid)
 #     ai.test_set_positions()
+#     
+
     
 #     # controller = ArmController()
     
