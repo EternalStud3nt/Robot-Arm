@@ -11,12 +11,15 @@ def control_robot():
             depth = float(input("Enter depth: "))
             height = float(input("Enter height: "))
             rotation = float(input("Enter base rotation: "))
+            close = input("Enter any key to close grip, none to open")
+            if close:
+                arm.set_grip(8)
+            else:
+                arm.set_grip(30)
         except ValueError:
             print("Invalid input. Please enter numeric values.")
         else:
-            arm.set_depth(depth)
-            arm.set_height(height)
-            arm.set_rotation_xz(rotation)
+            arm.set_position(depth, height, rotation)
 
 def test_robot_positioning():
     grid = Grid()
