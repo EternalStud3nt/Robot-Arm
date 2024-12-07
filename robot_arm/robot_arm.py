@@ -142,10 +142,13 @@ class RobotArm:
         z = self.depth * math.cos(math.radians(self.rotation))
         y = self.height
         return (x, y, z)
+
+    def set_depth_and_height(self, depth, height):
+        self.height = height
+        self.set_depth(depth)
     
     def set_position(self, depth, height, rotation):
-        self.set_height(height)
-        self.set_depth(depth)
+        self.set_depth_and_height(depth, height)
         self.set_rotation_xz(rotation)
         
     def set_grip(self, grip):
