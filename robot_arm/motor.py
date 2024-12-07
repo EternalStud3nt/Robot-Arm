@@ -1,4 +1,5 @@
 from robot_arm.PCA9685 import PCA9685
+import time
 import conversions
 
 class Motor:
@@ -13,7 +14,15 @@ class Motor:
         if(angle <= 0): angle = 0
         
         pulse = conversions.angle_to_pulse(angle)
-        self.pwm.setServoPulse(self.channel, pulse)
+        
+        # Send pulse over 50 steps to simulate smooth movement
+        current_pulse = conversions.angle_to_pulse(self.rotation)
+        step = (pulse - current_pulse) / 50  # 50 steps for 1 second
+        for i in range(50):
+            current_pulse += step
+            self.pwm.setServoPulse(self.channel, current_pulse)
+            time.sleep(0.02)  # 20 ms per step
+            
         self.rotation = angle
     
     def rotate(self, delta_angle):
