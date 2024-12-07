@@ -13,19 +13,17 @@ class Motor:
         if(target_rotation >= 180): target_rotation = 180
         if(target_rotation <= 0): target_rotation = 0
         
-        current_pulse = conversions.angle_to_pulse(self.rotation)
-        target_pulse = conversions.angle_to_pulse(target_rotation)
+        total_steps = abs(target_rotation - self.rotation)
+        total_time = 2  # Total time in seconds for the entire rotation
+        step_time = total_time / total_steps if total_steps != 0 else 0
         
-        print(f"Current pulse: {current_pulse}, target pulse: {target_pulse}, target rotation: {target_rotation}")
+        step = 1 if target_rotation > self.rotation else -1
+        for angle in range(self.rotation, target_rotation, step):
+            target_pulse = conversions.angle_to_pulse(angle)
+            self.pwm.setServoPulse(self.channel, target_pulse)
+            self.rotation = angle
+            time.sleep(step_time)  # Adjust the sleep time for desired speed
         
-        step_count = 50
-        step_delay = 1.0 / step_count
-        step_size = (target_pulse - current_pulse) / step_count
-        
-        for step in range(step_count):
-            current_pulse += step_size
-            self.pwm.setServoPulse(self.channel, current_pulse)
-            time.sleep(step_delay)
         
         self.pwm.setServoPulse(self.channel, target_pulse)
         self.rotation = target_rotation
