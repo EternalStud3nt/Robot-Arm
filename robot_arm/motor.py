@@ -7,8 +7,8 @@ class Motor:
         self.channel = channel
         self.pwm = pca
         self.rotation = 0
-        self.set_rotation(90)
         self.angular_speed = 67.5  # degrees per second
+        self.set_rotation(90)
     
     def set_rotation(self, target_rotation):
         if(target_rotation >= 180): target_rotation = 180
