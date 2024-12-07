@@ -18,7 +18,7 @@ class RobotArm:
         self.max_h_motor_rotation = 110
         self.min_h_motor_rotation = 10
         self.min_d_motor_rotation = 5
-        self.min_grip = 15
+        self.min_grip = 8
         
         self.motors = {
             "base": self.base_motor,

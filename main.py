@@ -25,6 +25,6 @@ def test_robot_positioning():
     ai.test_set_positions()
 
 if __name__ == "__main__":
-    controller = ArmController()
-    #control_robot()
+    #controller = ArmController()
+    control_robot()
     #test_robot_positioning()
