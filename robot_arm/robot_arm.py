@@ -10,8 +10,8 @@ class RobotArm:
         pwm.setPWMFreq(50)
         
         self.base_motor = Motor(0, pwm) # base motor
-        self.depth_motor = Motor(8, pwm) # depth arm motor
         self.height_motor = Motor(4, pwm) # height arm motor
+        self.depth_motor = Motor(8, pwm) # depth arm motor
         self.claw_motor = Motor(12, pwm) # claw motor
         
         self.max_d_motor_rotation = 170
@@ -172,7 +172,6 @@ class RobotArm:
         
 if __name__ == "__main__":
     arm = RobotArm()
-    arm.reset()
     while True:
         motor_channel = input("Enter motor channel (base, depth, height, claw): ").strip().lower()
         if motor_channel not in arm.motors:

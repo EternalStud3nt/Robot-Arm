@@ -29,5 +29,5 @@ def test_robot_positioning():
 
 if __name__ == "__main__":
     #controller = ArmController()
-    control_robot()
-    #test_robot_positioning()
+    #control_robot()
+    test_robot_positioning()
