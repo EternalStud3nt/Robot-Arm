@@ -7,7 +7,7 @@ class Motor:
         self.channel = channel
         self.pwm = pca
         self.initialize_rotation(90)
-        self.angular_speed = 67.5 
+        self.angular_speed = 50
 
     def initialize_rotation(self, initial_rotation):
         self.rotation = initial_rotation
@@ -18,7 +18,7 @@ class Motor:
         if(target_rotation >= 180): target_rotation = 180
         if(target_rotation <= 0): target_rotation = 0
         
-        delta_time = 0.1
+        delta_time = 0.05
         delta_step = self.angular_speed * delta_time
         if(target_rotation < self.rotation): delta_step  *= -1
         number_of_steps = abs(int((target_rotation - self.rotation) / delta_step))
