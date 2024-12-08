@@ -6,8 +6,10 @@ class Motor:
     def __init__(self, channel, pca):
         self.channel = channel
         self.pwm = pca
-        self.initialize_rotation(90)
+        self.rotation = 90
         self.angular_speed = 50
+        self.set_rotation(90)
+        
 
     def initialize_rotation(self, initial_rotation):
         self.rotation = initial_rotation
