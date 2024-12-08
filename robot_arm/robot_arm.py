@@ -40,7 +40,7 @@ class RobotArm:
         if not(new_angle >= 0 and new_angle <= 180):
             return
         
-        self.base_motor.set_rotation(angle + 90)
+        self.base_motor.set_rotation_smooth(angle + 90)
         self.rotation = angle
         print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
         
@@ -48,7 +48,7 @@ class RobotArm:
         self.set_rotation_xz(self.rotation + angle)
         
     def set_motor_rotation(self, motor_id, angle):
-        self.motors[motor_id].set_rotation(angle)
+        self.motors[motor_id].set_rotation_smooth(angle)
         
     def set_depth(self, depth):
         if(depth > 15 or depth < 4 or self.height > 15 or self.height < -5):
@@ -84,8 +84,8 @@ class RobotArm:
             print("Impossible to reach that position")
             return
         
-        self.depth_motor.set_rotation(theta_depth_deg)
-        self.height_motor.set_rotation(theta_height_deg)
+        self.depth_motor.set_rotation_smooth(theta_depth_deg)
+        self.height_motor.set_rotation_smooth(theta_height_deg)
         
         
         self.depth = depth
@@ -128,8 +128,8 @@ class RobotArm:
             print("Impossible to reach that position")
             return
         
-        self.depth_motor.set_rotation(theta_depth_deg)
-        self.height_motor.set_rotation(theta_height_deg)
+        self.depth_motor.set_rotation_smooth(theta_depth_deg)
+        self.height_motor.set_rotation_smooth(theta_height_deg)
         
         self.height = height
         print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
@@ -156,7 +156,7 @@ class RobotArm:
         elif grip > 90: grip = 90
         
         angle = grip * 180 / 100
-        self.claw_motor.set_rotation(angle)
+        self.claw_motor.set_rotation_smooth(angle)
         self.grip = grip
         print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
         
