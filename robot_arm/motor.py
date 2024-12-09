@@ -30,6 +30,8 @@ class Motor:
             self.set_rotation(self.rotation + delta_step )
             time.sleep(delta_time)
             
+        self.set_rotation(target_rotation)
+            
     def set_rotation(self, target_rotation):
         if(target_rotation >= 180): target_rotation = 180
         if(target_rotation <= 0): target_rotation = 0
