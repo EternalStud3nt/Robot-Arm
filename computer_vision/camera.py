@@ -1,5 +1,6 @@
 import cv2
 import os
+import time
 
 class Camera:
     def __init__(self, camera_index=0):
@@ -8,7 +9,7 @@ class Camera:
             raise Exception("Error: Could not open webcam.")
     
     
-    def capture_photo(self, filename="webcam_photo.jpg", save_location="."):
+    def capture_photo(self, filename="webcam_photo.jpg", save_location=".", show_preview=False):
         ret, frame = self.camera.read()
         
         # Ensure the filename has a valid image extension
@@ -24,15 +25,17 @@ class Camera:
             full_path = os.path.join(save_location, filename)
             cv2.imwrite(full_path, frame)
             print(f"Photo saved as {full_path}")
+            
+            if show_preview:
+                cv2.imshow("Captured Photo", frame)
+                cv2.waitKey(1)  # Display the image for 1 millisecond to ensure it shows up
+                time.sleep(1)  # Wait for 1 second
+                cv2.destroyAllWindows()
+            return frame
         else:
             print("Error: Could not capture photo.")
+            return None
             
-        cv2.imshow("Captured Photo", frame)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-        return frame
-        
-    
     def release(self):
         self.camera.release()
         cv2.destroyAllWindows()

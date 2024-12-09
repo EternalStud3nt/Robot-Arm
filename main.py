@@ -1,10 +1,21 @@
-from  tic_tac_toe.AI import AI
-from tic_tac_toe.grid import Grid
-from tic_tac_toe.game_manager import GameManager
-from robot_arm.arm_controller import ArmController
-from robot_arm.robot_arm import RobotArm
+import os
+import platform
+
+if platform.system() != 'Windows':
+    from robot_arm.arm_controller import ArmController
+    from robot_arm.robot_arm import RobotArm
+    from tic_tac_toe.AI import AI
+    from tic_tac_toe.grid import Grid
+    from tic_tac_toe.game_manager import GameManager
+    from tic_tac_toe.AI import AI
+    from tic_tac_toe.grid import Grid
+    from tic_tac_toe.game_manager import GameManager
 
 def control_robot():
+    if platform.system() == 'Windows':
+        print("Robot control is not supported on Windows.")
+        return
+
     arm = RobotArm()
     while True:
         try:
@@ -27,7 +38,28 @@ def test_robot_positioning():
     ai = AI(1, game_manager, grid)
     ai.test_set_positions()
 
+def capture_photos():
+    from computer_vision.camera import Camera
+    camera = Camera()
+    
+    base_folder = "data/ml_photos"
+    subfolder_index = 1
+    while os.path.exists(os.path.join(base_folder, f"session_{subfolder_index}")):
+        subfolder_index += 1
+    session_folder = os.path.join(base_folder, f"session_{subfolder_index}")
+    os.makedirs(session_folder)
+
+    photo_index = 0
+    while True:
+        if input("Press 'q' to quit, any other key to capture photo: ") == 'q':
+            break
+        else:
+            photo_index += 1
+            camera.capture_photo(f"ml_photo_{photo_index}", session_folder, True)
+    camera.release()
+
 if __name__ == "__main__":
     #controller = ArmController()
     #control_robot()
-    test_robot_positioning()
+    #test_robot_positioning()
+    capture_photos()
