@@ -39,3 +39,28 @@ class Camera:
     def release(self):
         self.camera.release()
         cv2.destroyAllWindows()
+
+    def start_live_feed(self, model):
+        while True:
+            ret, frame = self.camera.read()
+            if not ret:
+                print("Error: Could not read frame.")
+                break
+
+            # Perform object detection using YOLOv8
+            results = model(frame)
+
+            # Draw detections on the frame
+            for result in results:
+                for box in result.boxes:
+                    x1, y1, x2, y2 = map(int, box.xyxy[0])
+                    label = result.names[int(box.cls)]
+                    confidence = box.conf[0]
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    cv2.putText(frame, f"{label} ({confidence:.2f})", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+            cv2.imshow("Live Feed", frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        self.release()

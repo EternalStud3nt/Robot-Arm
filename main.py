@@ -58,8 +58,30 @@ def capture_photos():
             camera.capture_photo(f"ml_photo_{photo_index}", session_folder, True)
     camera.release()
 
+def test_live_feed():
+    from computer_vision.camera import Camera
+    from ultralytics import YOLO  # Import YOLOv8
+
+    camera = Camera()
+    model = YOLO("last.pt")  # Load your custom-trained model
+
+    camera.start_live_feed(model)
+
+def find_objects_in_image(image_path):
+    from ultralytics import YOLO  # Import YOLOv8
+    import cv2
+
+    model = YOLO("last.pt")  # Load your custom-trained model
+    image = cv2.imread(image_path)
+    results = model.predict(image_path, save=True, show=True)
+
+    
 if __name__ == "__main__":
     #controller = ArmController()
     #control_robot()
     #test_robot_positioning()
-    capture_photos()
+    #capture_photos()
+    # Uncomment the following line to test object detection in an image
+    # find_objects_in_image("path/to/your/image.jpg")
+    test_live_feed()
+    #find_objects_in_image("pic1.jpg")
