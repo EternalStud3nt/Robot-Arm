@@ -81,7 +81,7 @@ if __name__ == "__main__":
     #control_robot()
     #test_robot_positioning()
     #capture_photos()
-    # Uncomment the following line to test object detection in an image
-    # find_objects_in_image("path/to/your/image.jpg")
+    #Uncomment the following line to test object detection in an image
+    #find_objects_in_image("path/to/your/image.jpg")
     test_live_feed()
     #find_objects_in_image("pic1.jpg")
