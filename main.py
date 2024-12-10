@@ -67,7 +67,7 @@ def test_grid_translation():
     from tic_tac_toe.grid_digitizer import GridDigitizer
     from tic_tac_toe.grid import Grid
     
-    grid_translator = GridDigitizer()
+    grid_digitizer = GridDigitizer()
     grid = Grid()
     
     while True:
@@ -75,12 +75,12 @@ def test_grid_translation():
         if key == 'q':
             break
         elif key == 'r':
-            grid_translator.initialize_grid_area()
+            grid_digitizer.capture_grid_area()
         elif key == '':
-            cells = grid_translator.detect_grid_state()
+            cells = grid_digitizer.detect_grid_state()
             if cells:
                 grid.set_state(cells)
-                grid_translator.display_grid(grid)
+                grid_digitizer.display_grid(grid)
 
 def main():
     #start_camera_stream()
