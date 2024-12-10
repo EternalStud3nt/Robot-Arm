@@ -2,6 +2,10 @@ from tic_tac_toe.grid import Grid
 from tic_tac_toe.AI import AI
 from tic_tac_toe.human_player import HumanPlayer
 from input.event import Event
+from computer_vision.image_processor import ImageProcessor
+import cv2
+from computer_vision.camera import Camera
+from tic_tac_toe.grid_digitizer import GridDigitizer
 
 class GameManager:
     def __init__(self):
@@ -26,10 +30,13 @@ class GameManager:
         self.player_turn = None
         self.game_over = False
         
+        self.image_processor = ImageProcessor()
+        self.camera = Camera()
+        
+        self.grid_translator = GridDigitizer()
+        
     def display_grid(self):
-        for row in self.grid.cells:
-            print(' | '.join(row))
-            print('-' * 10)
+        self.grid_translator.display_grid(self.grid)
             
     def on_turn_over(self):
         if self.game_over:
@@ -64,5 +71,4 @@ class GameManager:
         
     def start_game(self):
         self.on_turn_over()
-    
-            
+

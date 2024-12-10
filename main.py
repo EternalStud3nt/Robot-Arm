@@ -6,10 +6,7 @@ if platform.system() != 'Windows':
     from robot_arm.robot_arm import RobotArm
     from tic_tac_toe.AI import AI
     from tic_tac_toe.grid import Grid
-    from tic_tac_toe.game_manager import GameManager
-    from tic_tac_toe.AI import AI
-    from tic_tac_toe.grid import Grid
-    from tic_tac_toe.game_manager import GameManager
+    from tic_tac_toe.grid_digitizer import GridDigitizer
 
 def control_robot():
     if platform.system() == 'Windows':
@@ -34,8 +31,7 @@ def control_robot():
 
 def test_robot_positioning():
     grid = Grid()
-    game_manager = GameManager()
-    ai = AI(1, game_manager, grid)
+    ai = AI(1, None, grid)
     ai.test_set_positions()
 
 def start_camera_stream():
@@ -66,11 +62,29 @@ def start_camera_stream():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     camera.release()
+
+def test_grid_translation():
+    from tic_tac_toe.grid_digitizer import GridDigitizer
+    from tic_tac_toe.grid import Grid
+    
+    grid_translator = GridDigitizer()
+    grid = Grid()
+    
+    while True:
+        key = input("Press 'r' to initialize grid, 'enter' to display grid, 'q' to quit: ").strip().lower()
+        if key == 'q':
+            break
+        elif key == 'r':
+            grid_translator.initialize_grid_area()
+        elif key == '':
+            cells = grid_translator.detect_grid_state()
+            if cells:
+                grid.set_state(cells)
+                grid_translator.display_grid(grid)
+
+def main():
+    #start_camera_stream()
+    pass
     
 if __name__ == "__main__":
-    #controller = ArmController()
-    #control_robot()
-    #test_robot_positioning()
-    #capture_photos()
-    start_camera_stream()
-    pass
+    main()

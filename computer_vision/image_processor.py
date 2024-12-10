@@ -36,7 +36,7 @@ class ImageProcessor:
         """
         Returns only the objects that are within the grid area.
         """
-        if grid_area == (None, None) or not objects:
+        if not grid_area or not objects:
             return objects
         
         filtered_objects = []
@@ -123,28 +123,3 @@ class ImageProcessor:
         frame_with_grid = self.draw_grid(frame, grid_area)
         frame_with_objects = self.draw_objects(frame_with_grid, objects)
         return frame_with_objects
-    
-    def get_grid_cells(self, frame, grid_objects):
-        """
-        Identifies 'X' and 'O' objects within the grid and returns the cells in the format used by grid.py.
-        """
-        # Initialize a 3x3 grid with empty spaces
-        cells = [[' ' for _ in range(3)] for _ in range(3)]
-        
-        # Calculate the width and height of the grid
-        grid_width = grid_objects[1][0] - grid_objects[0][0]
-        grid_height = grid_objects[1][1] - grid_objects[0][1]
-        
-        # Calculate the width and height of a cell
-        cell_width = grid_width // 3
-        cell_height = grid_height // 3
-        
-        for obj in grid_objects:
-            label, (x1, y1, x2, y2) = obj
-            if label in ['X', 'O']:
-                # Calculate the row and column of the cell
-                col = (x1 - grid_objects[0][0]) // cell_width
-                row = (y1 - grid_objects[0][1]) // cell_height
-                cells[row][col] = label
-        
-        return cells
