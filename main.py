@@ -49,6 +49,7 @@ def start_camera_stream():
     
     # Get the live feed from the camera and process each frame, then display it in a window
     frame_0 = camera.get_feed_photo()
+    
     # Get the grid area
     objects = processor.detect_objects(frame_0)
     cells = processor.filter_objects_by_name("Cell", objects)
@@ -57,12 +58,9 @@ def start_camera_stream():
     for frame in camera.get_feed_video():
         objects = processor.detect_objects(frame)
         
-        # Draw the grid on the processed frame
-        processed_frame = processor.draw_grid(frame, grid_area)
-        
-        # Draw the objects within the grid area
+        # Draw the grid and objects on the processed frame
         objects_in_grid = processor.filter_objects_within_grid(objects, grid_area)
-        processed_frame = processor.draw_objects(frame, objects_in_grid)
+        processed_frame = processor.draw_grid_and_objects(frame, grid_area, objects_in_grid)
         
         cv2.imshow("Live Feed", processed_frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -114,7 +114,12 @@ class ImageProcessor:
         
         overlay = frame.copy()
         cv2.rectangle(overlay, top_left, bottom_right, (0, 255, 255), -1)
-        alpha = 0.5  # Transparency factor.
+        alpha = 0.05  # Transparency factor.
         cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
         cv2.rectangle(frame, top_left, bottom_right, (0, 255, 255), 2)
         return frame
+
+    def draw_grid_and_objects(self, frame, grid_area, objects):
+        frame_with_grid = self.draw_grid(frame, grid_area)
+        frame_with_objects = self.draw_objects(frame_with_grid, objects)
+        return frame_with_objects
