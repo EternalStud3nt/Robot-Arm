@@ -64,3 +64,8 @@ class ImageProcessor:
             cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
             cv2.putText(frame, f"{label}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
         return frame
+
+    def draw_grid(self, frame):
+        top_left, bottom_right = self.detect_grid_area(frame)
+        cv2.rectangle(frame, top_left, bottom_right, (0, 255, 255), 2)
+        return frame
