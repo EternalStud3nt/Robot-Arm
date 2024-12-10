@@ -20,7 +20,7 @@ class ImageProcessor:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 label = result.names[int(box.cls)]
                 confidence = box.conf[0]
-                if confidence > 0.3:
+                if confidence > 0.35:
                     object = (label, (x1, y1, x2, y2))
                     objects.append(object)
         

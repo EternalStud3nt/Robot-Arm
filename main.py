@@ -77,12 +77,11 @@ def test_grid_translation():
         elif key == 'r':
             grid_digitizer.capture_grid_area()
         elif key == '':
-            cells = grid_digitizer.detect_grid_state()
-            if cells:
-                grid.set_state(cells)
-                grid_digitizer.display_grid(grid)
+            grid_digitizer.detect_grid_state()
+            grid_digitizer.display_grid()
 
 def main():
+    test_grid_translation()
     #start_camera_stream()
     pass
     
