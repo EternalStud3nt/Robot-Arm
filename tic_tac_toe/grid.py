@@ -6,6 +6,9 @@ class Grid:
         self.on_winner_detected = Event()
         self.on_turn_end = Event()
         self.cells = [[' ' for _ in range(3)] for _ in range(3)]
+        
+    def set_state(self, cells):
+        self.cells = cells
 
     def draw(self, row, col, symbol):
         if symbol not in ['X', 'O']:
