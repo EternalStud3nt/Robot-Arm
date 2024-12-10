@@ -7,7 +7,7 @@ class Grid:
         self.on_turn_end = Event()
         self.objects = [[' ' for _ in range(3)] for _ in range(3)]
         
-    def set_state(self, cells):
+    def set_objects(self, cells):
         self.objects = cells
 
     def draw(self, row, col, symbol):

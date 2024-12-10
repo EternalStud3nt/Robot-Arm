@@ -66,7 +66,7 @@ class GridDigitizer:
                     obj_col = (center[0] - self.grid_area[0][0]) // cell_width
                     symbols[obj_row][obj_col] = obj[0]
                 
-            self.grid.set_state(symbols)
+            self.grid.set_objects(symbols)
             
         
         return symbols
