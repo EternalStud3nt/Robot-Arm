@@ -58,17 +58,16 @@ def capture_photos():
             camera.capture_photo(f"ml_photo_{photo_index}", session_folder, True)
     camera.release()
 
-def test_live_feed():
+def start_camera_stream():
     from computer_vision.camera import Camera
-    from ultralytics import YOLO  # Import YOLOv8
+    from ultralytics import YOLO
 
     camera = Camera()
-    model = YOLO("last.pt")  # Load your custom-trained model
-
+    model = YOLO("last.pt")
     camera.start_live_feed(model)
 
 def find_objects_in_image(image_path):
-    from ultralytics import YOLO  # Import YOLOv8
+    from ultralytics import YOLO
     import cv2
 
     model = YOLO("last.pt")  # Load your custom-trained model
@@ -81,5 +80,5 @@ if __name__ == "__main__":
     #control_robot()
     #test_robot_positioning()
     #capture_photos()
-    test_live_feed()
+    start_camera_stream()
     pass
