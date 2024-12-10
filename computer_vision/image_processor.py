@@ -39,18 +39,29 @@ class ImageProcessor:
             return None, None
         
         cell_positions = []
-        # print number of cells and positions
-        #print("Number of cells: ", len(cells))
+        total_width = 0
+        total_height = 0
         
         for cell in cells:
             x1, y1, x2, y2 = map(int, cell[1])
             # Add the center of the box to the list of cell positions
             center = ((x1 + x2) // 2, (y1 + y2) // 2)
             cell_positions.append(center)
+            # Calculate the width and height of the cell
+            total_width += (x2 - x1)
+            total_height += (y2 - y1)
                 
+        # Calculate the average width and height of a cell
+        cell_width = total_width // len(cells)
+        cell_height = total_height // len(cells)
+        
         # Find the top left and bottom right coordinates of the grid area
         top_left = min(cell_positions, key=lambda x: x[0] + x[1])
         bottom_right = max(cell_positions, key=lambda x: x[0] + x[1])
+        
+        # Offset the top left and bottom right coordinates
+        top_left = (top_left[0] - cell_width * 2, top_left[1] - cell_height * 2)
+        bottom_right = (bottom_right[0] + cell_width * 2, bottom_right[1] + cell_height * 2)
         
         return top_left, bottom_right
 
