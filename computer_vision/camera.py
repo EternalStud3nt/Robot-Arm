@@ -40,38 +40,34 @@ class Camera:
         self.camera.release()
         cv2.destroyAllWindows()
 
-    def start_live_feed(self, model):
+    def get_feed_photo(self):
+        ret, frame = self.camera.read()
+        if not ret:
+            print("Error: Could not read frame.")
+            return None
+        return frame
+
+    def get_feed_video(self):
         while True:
-            ret, frame = self.camera.read()
-            if not ret:
-                print("Error: Could not read frame.")
+            frame = self.get_feed_photo()
+            if frame is None:
                 break
+            yield frame
+        self.release()
 
-            # Perform object detection using YOLOv8
-            results = model(frame)
+    def capture_train_photos(self):
+        base_folder = "data/ml_photos"
+        subfolder_index = 1
+        while os.path.exists(os.path.join(base_folder, f"session_{subfolder_index}")):
+            subfolder_index += 1
+        session_folder = os.path.join(base_folder, f"session_{subfolder_index}")
+        os.makedirs(session_folder)
 
-            # Draw detections on the frame
-            for result in results:
-                for box in result.boxes:
-                    x1, y1, x2, y2 = map(int, box.xyxy[0])
-                    label = result.names[int(box.cls)]
-                    confidence = box.conf[0]
-                    
-                    # Define a color for each class index
-                    colors = {
-                        0: (255, 128, 128),  # Gray for class 0
-                        1: (0, 255, 0),      # Green for class 1
-                        2: (0, 0, 255),      # Red for class 2
-                        # Add more colors for additional classes as needed
-                    }
-                    
-                    color = colors.get(int(box.cls), (255, 255, 255))  # Default to white if class index not in colors
-                    
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                    cv2.putText(frame, f"{label} ({confidence * 100:.1f}%)", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 1)
-
-            cv2.imshow("Live Feed", frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+        photo_index = 0
+        while True:
+            if input("Press 'q' to quit, any other key to capture photo: ") == 'q':
                 break
-
+            else:
+                photo_index += 1
+                self.capture_photo(f"ml_photo_{photo_index}", session_folder, True)
         self.release()

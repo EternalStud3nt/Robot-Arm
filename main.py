@@ -38,42 +38,22 @@ def test_robot_positioning():
     ai = AI(1, game_manager, grid)
     ai.test_set_positions()
 
-def capture_photos():
-    from computer_vision.camera import Camera
-    camera = Camera()
-    
-    base_folder = "data/ml_photos"
-    subfolder_index = 1
-    while os.path.exists(os.path.join(base_folder, f"session_{subfolder_index}")):
-        subfolder_index += 1
-    session_folder = os.path.join(base_folder, f"session_{subfolder_index}")
-    os.makedirs(session_folder)
-
-    photo_index = 0
-    while True:
-        if input("Press 'q' to quit, any other key to capture photo: ") == 'q':
-            break
-        else:
-            photo_index += 1
-            camera.capture_photo(f"ml_photo_{photo_index}", session_folder, True)
-    camera.release()
-
 def start_camera_stream():
     from computer_vision.camera import Camera
-    from ultralytics import YOLO
-
-    camera = Camera()
-    model = YOLO("last.pt")
-    camera.start_live_feed(model)
-
-def find_objects_in_image(image_path):
-    from ultralytics import YOLO
+    from computer_vision.image_processor import ImageProcessor
     import cv2
-
-    model = YOLO("last.pt")  # Load your custom-trained model
-    image = cv2.imread(image_path)
-    results = model.predict(image_path, save=True, show=True)
-
+    
+    # Create the camera and image processor objects
+    camera = Camera()
+    processor = ImageProcessor()
+    
+    # Get the live feed from the camera and process each frame, then display it in a window
+    for frame in camera.get_feed_video():
+        processed_frame = processor.process_frame(frame)
+        cv2.imshow("Live Feed", processed_frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    camera.release()
     
 if __name__ == "__main__":
     #controller = ArmController()
