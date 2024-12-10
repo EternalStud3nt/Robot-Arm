@@ -5,7 +5,7 @@ class ImageProcessor:
     def __init__(self):
         self.model = YOLO("last.pt")
 
-    def process_frame(self, frame):
+    def draw_objects(self, frame):
         results = self.model(frame)
         for result in results:
             for box in result.boxes:
