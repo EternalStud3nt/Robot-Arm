@@ -9,6 +9,8 @@ class ImageProcessor:
         """
         Detects objects in the frame and returns the labels and bounding boxes.
         """
+        if frame is None:
+            return []
         
         results = self.model(frame)
         
@@ -24,17 +26,32 @@ class ImageProcessor:
         
         return objects
 
-    def filter_objects(self, name, objects):
+    def filter_objects_by_name(self, name, objects):
         """
         Filters the detected objects by the given name.
         """
         return [object for object in objects if object[0] == name]
+    
+    def filter_objects_within_grid(self, objects, grid_area):
+        """
+        Returns only the objects that are within the grid area.
+        """
+        if grid_area == (None, None) or not objects:
+            return objects
+        
+        filtered_objects = []
+        for object in objects:
+            object_center = ((object[1][0] + object[1][2]) // 2, (object[1][1] + object[1][3]) // 2)
+            is_within_grid = grid_area[0][0] < object_center[0] < grid_area[1][0] and grid_area[0][1] < object_center[1] < grid_area[1][1]
+            if is_within_grid:
+                filtered_objects.append(object)
+        
+        return filtered_objects
 
     def detect_grid_area(self, cells):
         """
         Detects the grid area from the provided cells and returns the top left and bottom right coordinates.
         """
-        
         if not cells:
             return None, None
         
@@ -64,21 +81,33 @@ class ImageProcessor:
         bottom_right = (bottom_right[0] + cell_width * 2, bottom_right[1] + cell_height * 2)
         
         return top_left, bottom_right
-
-    def draw_objects(self, frame, objects):
-        for label, (x1, y1, x2, y2) in objects:
-            colors = {
+    
+    def draw_bounding_box(self, frame, object):
+        label, (x1, y1, x2, y2) = object
+        
+        colors = {
                 'X': (0, 0, 255),
                 'O': (0, 255, 0),
                 'Cell': (255, 255, 255),
             }
-            color = colors.get(label, (255, 255, 255))
-            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-            cv2.putText(frame, f"{label}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+        color = colors.get(label, (255, 255, 255))
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+        cv2.putText(frame, f"{label}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
         return frame
 
-    def draw_grid(self, frame, cells):
-        top_left, bottom_right = self.detect_grid_area(cells)
+    def draw_objects(self, frame, objects):
+        if not objects:
+            return frame
+        
+        for object in objects:
+            frame = self.draw_bounding_box(frame, object)
+        return frame
+
+    def draw_grid(self, frame, grid_area):
+        if grid_area is None:
+            return frame
+        
+        top_left, bottom_right = grid_area
         
         if top_left is None or bottom_right is None:
             return frame
