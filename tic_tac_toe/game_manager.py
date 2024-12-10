@@ -36,7 +36,7 @@ class GameManager:
         self.grid_translator = GridDigitizer()
         
     def display_grid(self):
-        self.grid_translator.display_grid(self.grid)
+        self.grid_translator.display_grid_state(self.grid)
             
     def on_turn_over(self):
         if self.game_over:

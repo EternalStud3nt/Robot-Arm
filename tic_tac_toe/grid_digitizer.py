@@ -6,8 +6,8 @@ class GridDigitizer:
     def __init__(self):
         self.image_processor = ImageProcessor()
         self.camera = Camera()
-        self.grid = Grid()
         self.grid_area = None
+        self.grid = Grid()
 
     def capture_grid_area(self):
         # Capture frame from camera
@@ -27,7 +27,7 @@ class GridDigitizer:
         self.grid_area = grid_area
         print("Grid area captured successfully.")
 
-    def detect_grid_state(self):
+    def capture_grid_state(self):
         # returns all objects that are within the grid area
         def get_grid_objects():
             if(self.grid_area is None):
@@ -71,7 +71,7 @@ class GridDigitizer:
         
         return symbols
 
-    def display_grid(self):
+    def display_grid_state(self):
         for row in self.grid.objects:
             print(' | '.join(row))
             print('-' * 10)

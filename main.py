@@ -77,8 +77,8 @@ def test_grid_translation():
         elif key == 'r':
             grid_digitizer.capture_grid_area()
         elif key == '':
-            grid_digitizer.detect_grid_state()
-            grid_digitizer.display_grid()
+            grid_digitizer.capture_grid_state()
+            grid_digitizer.display_grid_state()
 
 def main():
     test_grid_translation()
