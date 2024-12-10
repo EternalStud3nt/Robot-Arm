@@ -49,7 +49,10 @@ def start_camera_stream():
     
     # Get the live feed from the camera and process each frame, then display it in a window
     for frame in camera.get_feed_video():
-        processed_frame = processor.draw_objects(frame)
+        objects = processor.detect_objects(frame)
+        processed_frame = processor.draw_objects(frame, objects)
+        cells = processor.filter_objects("Cell", objects)
+        processed_frame = processor.draw_grid(processed_frame, cells)
         cv2.imshow("Live Feed", processed_frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
