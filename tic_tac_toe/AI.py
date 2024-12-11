@@ -14,11 +14,11 @@ class AI(Player):
         self.grab_coordinates = [[8.9, 0.2, -42.8], [12.6, 0.2, -42.2], [9.1, 0.2, 55.3], [12.3, 0.2, 53]]
         self.grid_cell_coordinates = [
             # Lower row
-            [[7.50, 1.26, 37.53], [6.15, 1.55, 16.83], [6.47, 1.09, -2.76]],
+            [[6, 1.25, 26], [4.6, 1.25, 6], [6.5, 1.25, -16]],
             # Middle row
-            [[10.86, 1.66, 29.22], [10.53, 1.28, 14.61], [9.95, 1.16, -1.44]],
+            [[9.5, 1.25, 21], [9, 1.25, 4], [9.5, 1.25, -13]],
             # Upper row
-            [[13.80, 0.75, 23.96], [14.20, 0.45, 12.51], [13.50, 1.30, -2.16]]
+            [[13, 1.25, 17], [13, 3], [13, 1.25, -10]]
         ]
         
         self.reset_arm_position()
@@ -103,7 +103,7 @@ class AI(Player):
         while True:
             for row in self.grid_cell_coordinates:
                 for cell in row:
-                    self.place_object_to_grid(cell[0], cell[1])
+                    self.place_object_to_grid()
             self.reset_arm_position()
             time.sleep(1)
 
