@@ -11,13 +11,11 @@ class GridDigitizer:
         self.grid_area = None
         self.grid = Grid()
         
-    def display_detections(self, frame):
+    def display_detections(self, frame, grid_detections):
         frame = frame.copy()        
-        objects = self.image_processor.detect_objects(frame)
             
         # Draw the grid and objects on the processed frame
-        objects_in_grid = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
-        processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, objects_in_grid)
+        processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, grid_detections)
         
         cv2.imshow("Grid State", processed_frame)
         cv2.waitKey(2000)  # Display for 2000 milliseconds (2 seconds)
@@ -39,7 +37,8 @@ class GridDigitizer:
         grid_area = self.image_processor.detect_grid_area(cells)
         
         self.grid_area = grid_area
-        self.display_detections(frame)
+        grid_detections = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
+        self.display_detections(frame, grid_detections)
         print("Grid area captured successfully.")
 
     def capture_grid_state(self):
@@ -56,20 +55,12 @@ class GridDigitizer:
                 print("Failed to capture image from camera.")
                 return
             
-            self.display_detections(frame)
-            
-            # objects = self.image_processor.detect_objects(frame)
-            # # Draw the grid and objects on the processed frame
-            # objects_in_grid = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
-            # processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, objects_in_grid)
-
             # Detect objects in the frame
             objects = self.image_processor.detect_objects(frame)
-            for obj in objects:
-                print(obj[0])
             
             # Filter objects within the grid area
             grid_objects = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
+            self.display_detections(frame, grid_objects)
             
             return grid_objects
         
@@ -82,20 +73,20 @@ class GridDigitizer:
             cell_width = grid_width // 3
             cell_height = grid_height // 3
             
-            grid_objects = [[' ' for _ in range(3)] for _ in range(3)]
+            grid_elements = [[' ' for _ in range(3)] for _ in range(3)]
             for obj in detected_objects:
                 if(obj[0] == "X" or obj[0] == "O"):
                     x1, y1, x2, y2 = obj[1]
                     center = ((x1 + x2) // 2, (y1 + y2) // 2)
                     obj_row = (center[1] - self.grid_area[0][1]) // cell_height
                     obj_col = (center[0] - self.grid_area[0][0]) // cell_width
-                    grid_objects[obj_row][obj_col] = obj[0]
+                    grid_elements[obj_row][obj_col] = obj[0]
                 
-            self.grid.set_objects(grid_objects)
+            self.grid.set_objects(grid_elements)
             
         return self.grid
 
     def display_grid_state(self):
-        for row in self.grid.boxes:
+        for row in self.grid.elements:
             print(' | '.join(row))
             print('-' * 10)
