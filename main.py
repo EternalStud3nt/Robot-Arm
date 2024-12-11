@@ -24,12 +24,12 @@ def control_robot():
         else:
             arm.set_position(depth, height, rotation)
 
-def test_robot_positioning():
+def debug_grab_coordinates():
     from tic_tac_toe.AI import AI
     from tic_tac_toe.grid import Grid
     grid = Grid()
     ai = AI(1, None, grid)
-    ai.test_grab()
+    ai.debug_grab()
 
 def test_grid_digitizer():
     from tic_tac_toe.grid_digitizer import GridDigitizer

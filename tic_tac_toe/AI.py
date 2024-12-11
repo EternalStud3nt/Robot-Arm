@@ -84,31 +84,13 @@ class AI(Player):
         time.sleep(1.5)
         self.arm.set_position(4, 8, 0)
         
+        self.grab_index = (self.grab_index + 1) % len(4)
+        
     def release_piece(self):
         self.arm.set_grip(25)
         
-        
-    def test_grab(self):
-        for row in range(3):
-            for col in range(3):
-                # grab a piece
-                self.grab_piece()
-                
-                # move above the grid cell
-                grid_position = self.grid_cell_coordinates[row][col]
-                self.arm.set_position(grid_position[0], grid_position[1] + 2, grid_position[2])
-                time.sleep(1)
-                
-                # move down to the grid cell
-                self.arm.set_position(grid_position[0], grid_position[1], grid_position[2])
-                time.sleep(1)
-                
-                # release the piece
-                self.release_piece()
-                time.sleep(1)
-                
-                # move up
-                self.arm.move_upwards(3)
-                
-                self.grab_index = (self.grab_index + 1) % len(self.grab_coordinates)
+    def debug_grab(self):
+        while True:
+            input("Press Enter to grab the next piece...")
+            self.grab_piece()
 
