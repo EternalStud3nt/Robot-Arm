@@ -67,9 +67,10 @@ def execute_game_loop():
     game_manager.start_game()
 
 def main():
+    execute_game_loop()
     #debug_grab_coordinates()
     #control_robot()
-    debug_grid_cell_coordinates()
+    #debug_grid_cell_coordinates()
     
     
 if __name__ == "__main__":

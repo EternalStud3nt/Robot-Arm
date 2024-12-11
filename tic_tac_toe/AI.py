@@ -11,14 +11,14 @@ class AI(Player):
         
         self.arm = RobotArm()
         self.grab_index = 0
-        self.grab_coordinates = [[8.9, 0.2, -42.8], [12.6, 0.2, -42.2], [9.1, 0.2, 55.3], [12.3, 0.2, 53]]
+        self.grab_coordinates = [[8.9, 0.4, -41.5], [12.6, 0.4, -42.2], [9.1, 0.2, 55.3], [12.3, 0.2, 52]]
         self.grid_cell_coordinates = [
             # Lower row
-            [[6, 1.25, 26], [4.6, 1.25, 6], [6.5, 1.25, -16]],
+            [[6, 1, 26], [6, 1, 6], [6.5, 1, -16]],
             # Middle row
-            [[9.5, 1.25, 21], [9, 1.25, 4], [9.5, 1.25, -13]],
+            [[9.9, 1, 22], [9.5, 1, 5], [10, 1, -12]],
             # Upper row
-            [[13, 1.25, 17], [13, 3], [13, 1.25, -10]]
+            [[13.5, 1, 17], [13.5, 1, 3], [13.5, 1, -10]]
         ]
         
         self.reset_arm_position()
@@ -26,6 +26,7 @@ class AI(Player):
     def make_move(self):
         (row, col) = self.calculate_best_move(self.game_manager.grid, self.symbol)
         self.place_object_to_grid(row, col)
+        self.on_move_completed.invoke()
             
     def calculate_best_move(self, grid, symbol):
         opponent_symbol = 'O' if symbol == 'X' else 'X'
@@ -68,7 +69,7 @@ class AI(Player):
         time.sleep(0.5)
         self.reset_arm_position()
         time.sleep(0.5)
-        self.on_move_completed.invoke()
+        
 
     def reset_arm_position(self):
         self.arm.set_position(8, 8, 90)
