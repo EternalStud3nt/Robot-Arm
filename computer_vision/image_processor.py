@@ -4,6 +4,7 @@ from ultralytics import YOLO
 class ImageProcessor:
     def __init__(self):
         self.model = YOLO("last.pt")
+        self.min_confidence = 0.45
 
     def detect_objects(self, frame):
         """
@@ -20,7 +21,7 @@ class ImageProcessor:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 label = result.names[int(box.cls)]
                 confidence = box.conf[0]
-                if confidence > 0.35:
+                if confidence > self.min_confidence:
                     object = (label, (x1, y1, x2, y2))
                     objects.append(object)
         
@@ -99,8 +100,22 @@ class ImageProcessor:
         if not objects:
             return frame
         
+        def draw_class_counts(frame, class_counts):
+            y_offset = 20
+            for label, count in class_counts.items():
+                text = f"{label}: {count}"
+                cv2.putText(frame, text, (frame.shape[1] - 150, y_offset), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                y_offset += 30
+            return frame
+        
+        class_counts = {}
         for object in objects:
+            label = object[0]
+            class_counts[label] = class_counts.get(label, 0) + 1
             frame = self.draw_bounding_box(frame, object)
+        
+        frame = draw_class_counts(frame, class_counts)
+        
         return frame
 
     def draw_grid(self, frame, grid_area):

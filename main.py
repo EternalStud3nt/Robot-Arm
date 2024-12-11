@@ -31,6 +31,22 @@ def test_robot_positioning():
     ai = AI(1, None, grid)
     ai.test_grab()
 
+def test_grid_digitizer():
+    from tic_tac_toe.grid_digitizer import GridDigitizer
+    digitizer = GridDigitizer()
+    
+    while(True):
+        prompt = input("Press r to capture grid area, enter to capture grid state, or q to quit: ")
+        if prompt == 'r':
+            digitizer.capture_grid_area()
+        elif prompt == '':
+            digitizer.capture_grid_state()
+            digitizer.display_grid_state()
+        elif prompt == 'q':
+            break
+        else:
+            print("Invalid input. Please try again.")
+
 def execute_game_loop():
     from tic_tac_toe.grid_digitizer import GridDigitizer
     from tic_tac_toe.grid import Grid
@@ -41,7 +57,7 @@ def execute_game_loop():
     game_manager.start_game()
 
 def main():
-    execute_game_loop()
+    test_grid_digitizer()
     
 if __name__ == "__main__":
     main()

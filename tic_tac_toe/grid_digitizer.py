@@ -11,7 +11,8 @@ class GridDigitizer:
         self.grid_area = None
         self.grid = Grid()
         
-    def display_detections(self, frame):        
+    def display_detections(self, frame):
+        frame = frame.copy()        
         objects = self.image_processor.detect_objects(frame)
             
         # Draw the grid and objects on the processed frame
@@ -56,12 +57,20 @@ class GridDigitizer:
                 return
             
             self.display_detections(frame)
+            
+            # objects = self.image_processor.detect_objects(frame)
+            # # Draw the grid and objects on the processed frame
+            # objects_in_grid = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
+            # processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, objects_in_grid)
 
             # Detect objects in the frame
             objects = self.image_processor.detect_objects(frame)
+            for obj in objects:
+                print(obj[0])
             
             # Filter objects within the grid area
             grid_objects = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
+            
             return grid_objects
         
         detected_objects = capture_objects_in_grid_area()
