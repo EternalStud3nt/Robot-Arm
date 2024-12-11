@@ -11,7 +11,9 @@ class GameManager:
     def __init__(self):
         # Create grid instance
         self.grid = Grid()
-        self.grid.on_turn_end.subscribe(self.on_turn_over)
+        
+        # Subscribe to grid events
+        self.grid.on_turn_end.subscribe(self.on_move_completed)
         self.grid.on_winner_detected.subscribe(self.on_winner_detected)
         
         # Create event for move requests
@@ -23,52 +25,47 @@ class GameManager:
         
         # Create player instances
         self.bot_player = AI("bot", self, self.grid)
+        self.bot_player.on_move_completed.subscribe(self.grid.make_move)
         self.human_player = HumanPlayer("human", self, self.grid)
+        self.human_player.on_move_completed.subscribe(self.grid.make_move)
         
         # Initialize game state
         self.winner = None
         self.player_turn = None
         self.game_over = False
         
-        self.image_processor = ImageProcessor()
-        self.camera = Camera()
-        
-        self.grid_translator = GridDigitizer()
-        
-    def display_grid(self):
-        self.grid_translator.display_grid_state(self.grid)
-            
-    def on_turn_over(self):
-        if self.game_over:
-            return
-        
-        self.display_grid()
-        
-        if self.player_turn == None:
-            print("Human starts with the first move...")
-            self.player_turn = "human"
-        
-        else:
-            if self.player_turn == "human":
-                self.player_turn = "bot"
-            elif self.player_turn == "bot":
-                self.player_turn = "human"
-        
-        self.on_move_requested.invoke(self.player_turn)
-        
-    def on_winner_detected(self, winner_symbol):
-        self.display_grid()
-        self.game_over = True
-        
-        if winner_symbol == self.human_player_symbol:
-            print("Human wins!")
-            self.winner = "human"
-        elif winner_symbol == self.bot_player_symbol:
-            print("Bot wins!")
-            self.winner = "bot"
-        else:
-            print("It's a draw!")
+        self.grid_digitizer = GridDigitizer()
         
     def start_game(self):
-        self.on_turn_over()
+        self.grid_digitizer.capture_grid_area()
+        self.grid = self.grid_digitizer.capture_grid_state()
+        self.grid_digitizer.display_grid_state()
+        self.player_turn = "human"
+        self.human_player.make_move()
+        
+    def on_move_completed(self):
+        self.grid = self.grid_digitizer.capture_grid_state()
+        self.grid_digitizer.display_grid_state()
+        
+        winner = self.grid.check_winner()
+        if winner:
+            self.on_winner_detected(winner)
+            return
+        elif self.grid.is_grid_full():
+            self.on_grid_full()
+            return
+        
+        self.player_turn = "bot" if self.player_turn == "human" else "human"
+        if(self.player_turn == "human"):
+            self.human_player.make_move()
+        elif self.player_turn == "bot":
+            self.bot_player.make_move()
+    
+    def on_winner_detected(self, winner):
+        print(f"{winner} wins!")
+        self.game_over = True
+    
+    def on_grid_full(self):
+        print("It's a tie!")
+        self.game_over = True
 

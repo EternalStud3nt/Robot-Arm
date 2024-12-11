@@ -21,39 +21,47 @@ class AI(Player):
         ]
 
     def make_move(self):
-        def calculate_next_move():
-            # Check if AI can win in the next move
-            for row in range(3):
-                for col in range(3):
-                    if self.grid.cells[row][col] == ' ':
-                        self.grid.cells[row][col] = self.symbol
-                        if self.grid.check_for_winner():
-                            return row, col
-                        self.grid.cells[row][col] = ' '
-
-            # Check if opponent can win in the next move and block them
-            opponent_symbol = 'O' if self.symbol == 'X' else 'X'
-            for row in range(3):
-                for col in range(3):
-                    if self.grid.cells[row][col] == ' ':
-                        self.grid.cells[row][col] = opponent_symbol
-                        if self.grid.check_for_winner():
-                            self.grid.cells[row][col] = self.symbol
-                            return row, col
-                        self.grid.cells[row][col] = ' '
-
-            # Otherwise, choose a random empty cell
-            empty_cells = []
-            for row in range(3):
-                for col in range(3):
-                    if self.grid.cells[row][col] == ' ':
-                        empty_cells.append((row, col))
+        (row, col) = self.calculate_best_move(self.grid.grid, self.symbol)
+        self.place_object_to_grid(row, col)
             
-            random_cell = random.choice(empty_cells)
-            return random_cell
-
-        row, col = calculate_next_move()
-        self.draw(row, col)
+    def calculate_best_move(self, grid, symbol):
+        opponent_symbol = 'O' if symbol == 'X' else 'X'
+        
+        # Check if AI can win in the next move
+        for row in range(3):
+            for col in range(3):
+                if grid[row][col] == ' ':
+                    grid_copy = [r[:] for r in grid]
+                    grid_copy[row][col] = symbol
+                    if self.grid.check_for_winner(grid_copy):
+                        return row, col
+        
+        # Check if opponent can win in the next move and block them
+        for row in range(3):
+            for col in range(3):
+                if grid[row][col] == ' ':
+                    grid_copy = [r[:] for r in grid]
+                    grid_copy[row][col] = opponent_symbol
+                    if self.grid.check_for_winner(grid_copy):
+                        return row, col
+        
+        # Place symbol in a random available cell
+        available_moves = [(row, col) for row in range(3) for col in range(3) if grid[row][col] == ' ']
+        return random.choice(available_moves)
+        
+    def place_object_to_grid(self, row, col):
+        self.grab_piece()
+        time.sleep(0.5)
+        pos = self.grid_cell_coordinates[row][col]
+        self.arm.set_position(pos[0], pos[1] + 2, pos[2])
+        time.sleep(0.5)
+        self.arm.set_position(pos[0], pos[1] + 0.3, pos[2])
+        time.sleep(0.5)
+        self.release_piece()
+        time.sleep(0.5)
+        self.arm.set_position(8, 8, 0)
+        time.sleep(0.5)
+        self.on_move_completed.invoke()
         
     def grab_piece(self):
         grab_position = self.grab_coordinates[self.grab_index]
@@ -75,7 +83,7 @@ class AI(Player):
         self.arm.set_grip(25)
         
         
-    def test_set_positions(self):
+    def test_grab(self):
         for row in range(3):
             for col in range(3):
                 # grab a piece
@@ -98,5 +106,4 @@ class AI(Player):
                 self.arm.move_upwards(3)
                 
                 self.grab_index = (self.grab_index + 1) % len(self.grab_coordinates)
-                
-        
+

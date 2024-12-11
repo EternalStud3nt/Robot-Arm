@@ -29,7 +29,7 @@ class GridDigitizer:
 
     def capture_grid_state(self):
         # returns all objects that are within the grid area
-        def get_grid_objects():
+        def capture_objects_in_grid_area():
             if(self.grid_area is None):
                 print("Grid area is not initialized.")
                 return None
@@ -48,8 +48,8 @@ class GridDigitizer:
             grid_objects = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
             return grid_objects
         
-        grid_objects = get_grid_objects()
-        if grid_objects is None:
+        detected_objects = capture_objects_in_grid_area()
+        if detected_objects is None:
             return None
         else:
             grid_width = self.grid_area[1][0] - self.grid_area[0][0]
@@ -57,21 +57,20 @@ class GridDigitizer:
             cell_width = grid_width // 3
             cell_height = grid_height // 3
             
-            symbols = [[' ' for _ in range(3)] for _ in range(3)]
-            for obj in grid_objects:
+            grid_objects = [[' ' for _ in range(3)] for _ in range(3)]
+            for obj in detected_objects:
                 if(obj[0] == "X" or obj[0] == "O"):
                     x1, y1, x2, y2 = obj[1]
                     center = ((x1 + x2) // 2, (y1 + y2) // 2)
                     obj_row = (center[1] - self.grid_area[0][1]) // cell_height
                     obj_col = (center[0] - self.grid_area[0][0]) // cell_width
-                    symbols[obj_row][obj_col] = obj[0]
+                    grid_objects[obj_row][obj_col] = obj[0]
                 
-            self.grid.set_objects(symbols)
+            self.grid.set_objects(grid_objects)
             
-        
-        return symbols
+        return self.grid
 
     def display_grid_state(self):
-        for row in self.grid.objects:
+        for row in self.grid.boxes:
             print(' | '.join(row))
             print('-' * 10)

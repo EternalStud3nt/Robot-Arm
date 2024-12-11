@@ -32,7 +32,7 @@ def control_robot():
 def test_robot_positioning():
     grid = Grid()
     ai = AI(1, None, grid)
-    ai.test_set_positions()
+    ai.test_grab()
 
 def start_camera_stream():
     from computer_vision.camera import Camera

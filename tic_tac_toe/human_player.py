@@ -6,5 +6,5 @@ class HumanPlayer(Player):
         super().__init__(id, game_manager, grid)
 
     def make_move(self):
-        old_grid = self.grid.cells
-        
+        input("Press Enter when you have made your move...")
+        self.on_move_completed.invoke()
