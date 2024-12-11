@@ -20,6 +20,8 @@ class AI(Player):
             # Upper row
             [[13.80, 0.75, 23.96], [14.20, 0.45, 12.51], [13.50, 1.30, -2.16]]
         ]
+        
+        self.reset_arm_position()
 
     def make_move(self):
         (row, col) = self.calculate_best_move(self.game_manager.grid, self.symbol)
