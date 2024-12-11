@@ -37,10 +37,14 @@ class GameManager:
         self.grid_digitizer = GridDigitizer()
         
     def start_game(self):
+        input("Capturing grid area. Press Enter when ready...")
         self.grid_digitizer.capture_grid_area()
         self.grid = self.grid_digitizer.capture_grid_state()
         self.grid_digitizer.display_grid_state()
+        print("Grid area captured successfully!")
+        
         self.player_turn = "human"
+        print(f"Player {self.player_turn} starts the game!")
         self.human_player.make_move()
         
     def on_move_completed(self):

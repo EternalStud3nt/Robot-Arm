@@ -1,14 +1,9 @@
 import os
 import platform
 
-if platform.system() != 'Windows':
-    from robot_arm.arm_controller import ArmController
-    from robot_arm.robot_arm import RobotArm
-    from tic_tac_toe.AI import AI
-    from tic_tac_toe.grid import Grid
-    from tic_tac_toe.grid_digitizer import GridDigitizer
-
 def control_robot():
+    from robot_arm.robot_arm import RobotArm
+    
     if platform.system() == 'Windows':
         print("Robot control is not supported on Windows.")
         return
@@ -30,6 +25,8 @@ def control_robot():
             arm.set_position(depth, height, rotation)
 
 def test_robot_positioning():
+    from tic_tac_toe.AI import AI
+    from tic_tac_toe.grid import Grid
     grid = Grid()
     ai = AI(1, None, grid)
     ai.test_grab()
@@ -66,9 +63,10 @@ def start_camera_stream():
 def test_grid_translation():
     from tic_tac_toe.grid_digitizer import GridDigitizer
     from tic_tac_toe.grid import Grid
+    from tic_tac_toe.game_manager import GameManager
     
-    grid_digitizer = GridDigitizer()
-    grid = Grid()
+    game_manager = GameManager()
+    game_manager.start_game()
     
     while True:
         key = input("Press 'r' to initialize grid, 'enter' to display grid, 'q' to quit: ").strip().lower()
@@ -81,8 +79,7 @@ def test_grid_translation():
             grid_digitizer.display_grid_state()
 
 def main():
-    test_grid_translation()
-    #start_camera_stream()
+    
     pass
     
 if __name__ == "__main__":
