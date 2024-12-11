@@ -27,9 +27,11 @@ def control_robot():
 def debug_grab_coordinates():
     from tic_tac_toe.AI import AI
     from tic_tac_toe.grid import Grid
-    grid = Grid()
-    ai = AI(1, None, grid)
-    ai.debug_grab()
+    from tic_tac_toe.game_manager import GameManager
+
+    game_manager = GameManager()
+    ai = game_manager.bot_player
+    ai.debug_grab_coordinates()
 
 def test_grid_digitizer():
     from tic_tac_toe.grid_digitizer import GridDigitizer
@@ -56,7 +58,7 @@ def execute_game_loop():
     game_manager.start_game()
 
 def main():
-    test_grid_digitizer()
+    debug_grab_coordinates()
     
 if __name__ == "__main__":
     main()

@@ -11,7 +11,7 @@ class AI(Player):
         
         self.arm = RobotArm()
         self.grab_index = 0
-        self.grab_coordinates = [[8.9, 0.3, -42.8], [12.6, 0.3, -42.2], [9.1, 0.4, 55.3], [12.3, 0.3, 53]]
+        self.grab_coordinates = [[8.9, 0.2, -42.8], [12.6, 0.2, -42.2], [9.1, 0.2, 55.3], [12.3, 0.2, 53]]
         self.grid_cell_coordinates = [
             # Lower row
             [[7.50, 1.26, 37.53], [6.15, 1.55, 16.83], [6.47, 1.09, -2.76]],
@@ -87,15 +87,23 @@ class AI(Player):
         time.sleep(1)
         self.arm.set_grip(5)
         time.sleep(1.5)
-        self.arm.set_position(4, 8, 0)
+        self.arm.set_position(6, 8, 0)
         
-        self.grab_index = (self.grab_index + 1) % len(4)
+        self.grab_index = (self.grab_index + 1) % len(self.grab_coordinates)
         
     def release_piece(self):
         self.arm.set_grip(25)
         
-    def debug_grab(self):
+    def debug_grab_coordinates(self):
         while True:
             input("Press Enter to grab the next piece...")
             self.grab_piece()
+
+    def debug_grid_cell_coordinates(self):
+        while True:
+            for row in self.grid_cell_coordinates:
+                for cell in row:
+                    self.place_object_to_grid(cell[0], cell[1])
+            self.reset_arm_position()
+            time.sleep(1)
 
