@@ -101,9 +101,9 @@ class AI(Player):
 
     def debug_grid_cell_coordinates(self):
         while True:
-            for row in self.grid_cell_coordinates:
-                for cell in row:
-                    self.place_object_to_grid()
+            for row_index, row in enumerate(self.grid_cell_coordinates):
+                for col_index, cell in enumerate(row):
+                    self.place_object_to_grid(row_index, col_index)
             self.reset_arm_position()
             time.sleep(1)
 
