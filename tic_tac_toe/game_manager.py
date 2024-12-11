@@ -23,10 +23,12 @@ class GameManager:
         self.human_player_symbol = 'X'
         self.bot_player_symbol = 'O'
         
+        self.grid_digitizer = GridDigitizer()
+        
         # Create player instances
-        self.bot_player = AI("bot", self, self.grid)
+        self.bot_player = AI("bot", self)
         self.bot_player.on_move_completed.subscribe(self.grid.make_move)
-        self.human_player = HumanPlayer("human", self, self.grid)
+        self.human_player = HumanPlayer("human", self)
         self.human_player.on_move_completed.subscribe(self.grid.make_move)
         
         # Initialize game state
@@ -34,7 +36,6 @@ class GameManager:
         self.player_turn = None
         self.game_over = False
         
-        self.grid_digitizer = GridDigitizer()
         
     def start_game(self):
         input("Capturing grid area. Press Enter when ready...")

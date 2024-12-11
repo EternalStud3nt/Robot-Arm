@@ -5,8 +5,8 @@ from robot_arm.robot_arm import RobotArm
 
 
 class AI(Player):
-    def __init__(self, id, game_manager, grid):
-        super().__init__(id, game_manager, grid)
+    def __init__(self, id, game_manager):
+        super().__init__(id, game_manager)
         
         self.arm = RobotArm()
         self.grab_index = 0

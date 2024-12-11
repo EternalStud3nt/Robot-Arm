@@ -2,10 +2,9 @@ from tic_tac_toe.grid import Grid
 from input.event import Event
 
 class Player:
-    def __init__(self, id, game_manager, grid):
+    def __init__(self, id, game_manager):
         self.id = id
         self.game_manager = game_manager
-        self.grid_digitizer = game_manager.grid_digitizer
         self.on_move_completed = Event()
         self.symbol = None
         

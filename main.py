@@ -60,7 +60,7 @@ def start_camera_stream():
             break
     camera.release()
 
-def test_grid_translation():
+def execute_game_loop():
     from tic_tac_toe.grid_digitizer import GridDigitizer
     from tic_tac_toe.grid import Grid
     from tic_tac_toe.game_manager import GameManager
@@ -68,19 +68,8 @@ def test_grid_translation():
     game_manager = GameManager()
     game_manager.start_game()
     
-    while True:
-        key = input("Press 'r' to initialize grid, 'enter' to display grid, 'q' to quit: ").strip().lower()
-        if key == 'q':
-            break
-        elif key == 'r':
-            grid_digitizer.capture_grid_area()
-        elif key == '':
-            grid_digitizer.capture_grid_state()
-            grid_digitizer.display_grid_state()
-
 def main():
-    
-    pass
+    execute_game_loop()
     
 if __name__ == "__main__":
     main()
