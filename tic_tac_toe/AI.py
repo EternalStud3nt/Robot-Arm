@@ -13,11 +13,11 @@ class AI(Player):
         self.grab_index = 0
         self.grab_coordinates = [[8.9, 0.2, -42.8], [12.6, 0.2, -42.2], [9.1, 0.2, 55.3], [12.3, 0.2, 53]]
         self.grid_cell_coordinates = [
-            # Lower row
+            # Low right-center-left
             [[6, 1.25, -16], [4.6, 1.25, 6], [6.5, 1.25, 26]],
-            # Middle row
+            # Middle right-center-left
             [[9.5, 1.25, -13], [9, 1.25, 4], [9.5, 1.25, 21]],
-            # Upper row
+            # Upper right-center-left
             [[13, 1.25, -10], [13, 3], [13, 1.25, 17]]
         ]
         
