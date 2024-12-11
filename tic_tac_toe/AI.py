@@ -64,9 +64,12 @@ class AI(Player):
         time.sleep(0.5)
         self.release_piece()
         time.sleep(0.5)
-        self.arm.set_position(8, 8, 0)
+        self.reset_arm_position()
         time.sleep(0.5)
         self.on_move_completed.invoke()
+
+    def reset_arm_position(self):
+        self.arm.set_position(8, 8, 90)
         
     def grab_piece(self):
         grab_position = self.grab_coordinates[self.grab_index]
