@@ -53,7 +53,6 @@ def execute_game_loop():
     from tic_tac_toe.game_manager import GameManager
 
     game_manager = GameManager()
-    
     game_manager.start_game()
 
 def main():
