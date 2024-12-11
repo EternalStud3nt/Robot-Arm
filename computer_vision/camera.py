@@ -11,6 +11,10 @@ class Camera:
     def capture_photo(self, filename="webcam_photo.jpg", save_location="./photos", show_preview=False):
         ret, frame = self.camera.read()
         
+        # Flush the buffer by reading a few frames
+        for _ in range(10):
+            ret, frame = self.camera.read()
+            
         # Ensure the filename has a valid image extension
         if not filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
             filename += ".jpg"
@@ -42,6 +46,11 @@ class Camera:
 
     def get_feed_photo(self):
         ret, frame = self.camera.read()
+        
+        # Flush the buffer by reading a few frames
+        for _ in range(10):
+            ret, frame = self.camera.read()
+            
         if not ret:
             print("Error: Could not read frame.")
             return None
