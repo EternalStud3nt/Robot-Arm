@@ -71,3 +71,19 @@ class Camera:
                 photo_index += 1
                 self.capture_photo(f"ml_photo_{photo_index}", session_folder, True)
         self.release()
+
+
+def main():
+    camera = Camera()
+    try:
+        for frame in camera.get_feed_video():
+            cv2.imshow("Video Feed", frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    finally:
+        camera.release()
+        cv2.destroyAllWindows()
+    
+
+if __name__ == "__main__":
+    main()

@@ -31,43 +31,15 @@ def test_robot_positioning():
     ai = AI(1, None, grid)
     ai.test_grab()
 
-def start_camera_stream():
-    from computer_vision.camera import Camera
-    from computer_vision.image_processor import ImageProcessor
-    import cv2
-    
-    # Create the camera and image processor objects
-    camera = Camera()
-    processor = ImageProcessor()
-    
-    # Get the live feed from the camera and process each frame, then display it in a window
-    frame_0 = camera.get_feed_photo()
-    
-    # Get the grid area
-    objects = processor.detect_objects(frame_0)
-    cells = processor.filter_objects_by_name("Cell", objects)
-    grid_area = processor.detect_grid_area(cells)
-        
-    for frame in camera.get_feed_video():
-        objects = processor.detect_objects(frame)
-        
-        # Draw the grid and objects on the processed frame
-        objects_in_grid = processor.filter_objects_within_grid(objects, grid_area)
-        processed_frame = processor.draw_grid_and_objects(frame, grid_area, objects_in_grid)
-        
-        cv2.imshow("Live Feed", processed_frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    camera.release()
-
 def execute_game_loop():
     from tic_tac_toe.grid_digitizer import GridDigitizer
     from tic_tac_toe.grid import Grid
     from tic_tac_toe.game_manager import GameManager
-    
+
     game_manager = GameManager()
-    game_manager.start_game()
     
+    game_manager.start_game()
+
 def main():
     execute_game_loop()
     

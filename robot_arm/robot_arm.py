@@ -164,13 +164,7 @@ class RobotArm:
         self.set_grip(self.grip + delta_grip)
                
     def reset(self):
-        self.claw_motor.set_rotation(90)
-        time.sleep(0.2)
-        self.height_motor.set_rotation(90)
-        time.sleep(0.2)
-        self.depth_motor.set_rotation(90)
-        time.sleep(0.2)
-        self.base_motor.set_rotation(90)
+        self.set_position(4, 8, 0)
         
 if __name__ == "__main__":
     arm = RobotArm()

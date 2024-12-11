@@ -1,6 +1,8 @@
 from computer_vision.image_processor import ImageProcessor
 from computer_vision.camera import Camera
 from tic_tac_toe.grid import Grid
+from threading import Thread
+import cv2
 
 class GridDigitizer:
     def __init__(self):
@@ -8,11 +10,22 @@ class GridDigitizer:
         self.camera = Camera()
         self.grid_area = None
         self.grid = Grid()
+        
+    def display_detections(self, frame):        
+        objects = self.image_processor.detect_objects(frame)
+            
+        # Draw the grid and objects on the processed frame
+        objects_in_grid = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
+        processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, objects_in_grid)
+        
+        cv2.imshow("Grid State", processed_frame)
+        cv2.waitKey(2000)  # Display for 2000 milliseconds (2 seconds)
+        cv2.destroyAllWindows()
+            
 
     def capture_grid_area(self):
         # Capture frame from camera
         frame = self.camera.get_feed_photo()
-        
         if frame is None:
             print("Failed to capture image from camera.")
             return None
@@ -25,6 +38,7 @@ class GridDigitizer:
         grid_area = self.image_processor.detect_grid_area(cells)
         
         self.grid_area = grid_area
+        self.display_detections(frame)
         print("Grid area captured successfully.")
 
     def capture_grid_state(self):
@@ -41,6 +55,8 @@ class GridDigitizer:
                 print("Failed to capture image from camera.")
                 return
             
+            self.display_detections(frame)
+
             # Detect objects in the frame
             objects = self.image_processor.detect_objects(frame)
             

@@ -2,6 +2,7 @@ import time
 import random
 from tic_tac_toe.player import Player
 from robot_arm.robot_arm import RobotArm
+from tic_tac_toe.grid import Grid
 
 
 class AI(Player):
@@ -21,7 +22,7 @@ class AI(Player):
         ]
 
     def make_move(self):
-        (row, col) = self.calculate_best_move(self.grid.grid, self.symbol)
+        (row, col) = self.calculate_best_move(self.game_manager.grid, self.symbol)
         self.place_object_to_grid(row, col)
             
     def calculate_best_move(self, grid, symbol):
@@ -30,23 +31,27 @@ class AI(Player):
         # Check if AI can win in the next move
         for row in range(3):
             for col in range(3):
-                if grid[row][col] == ' ':
-                    grid_copy = [r[:] for r in grid]
-                    grid_copy[row][col] = symbol
-                    if self.grid.check_for_winner(grid_copy):
+                if grid.boxes[row][col] == ' ':
+                    boxes = [r[:] for r in grid.boxes]
+                    boxes[row][col] = symbol
+                    new_grid = Grid()
+                    new_grid.set_objects(boxes)
+                    if new_grid.check_for_winner():
                         return row, col
         
         # Check if opponent can win in the next move and block them
         for row in range(3):
             for col in range(3):
-                if grid[row][col] == ' ':
-                    grid_copy = [r[:] for r in grid]
-                    grid_copy[row][col] = opponent_symbol
-                    if self.grid.check_for_winner(grid_copy):
+                if grid.boxes[row][col] == ' ':
+                    boxes = [r[:] for r in grid.boxes]
+                    boxes[row][col] = opponent_symbol
+                    new_grid = Grid()
+                    new_grid.set_objects(boxes)
+                    if new_grid.check_for_winner():
                         return row, col
         
         # Place symbol in a random available cell
-        available_moves = [(row, col) for row in range(3) for col in range(3) if grid[row][col] == ' ']
+        available_moves = [(row, col) for row in range(3) for col in range(3) if grid.boxes[row][col] == ' ']
         return random.choice(available_moves)
         
     def place_object_to_grid(self, row, col):
@@ -77,7 +82,7 @@ class AI(Player):
         time.sleep(1)
         self.arm.set_grip(5)
         time.sleep(1.5)
-        self.arm.set_position(8, 8, 0)
+        self.arm.set_position(4, 8, 0)
         
     def release_piece(self):
         self.arm.set_grip(25)

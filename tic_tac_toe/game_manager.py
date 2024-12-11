@@ -27,9 +27,9 @@ class GameManager:
         
         # Create player instances
         self.bot_player = AI("bot", self)
-        self.bot_player.on_move_completed.subscribe(self.grid.make_move)
+        self.bot_player.on_move_completed.subscribe(self.on_move_completed)
         self.human_player = HumanPlayer("human", self)
-        self.human_player.on_move_completed.subscribe(self.grid.make_move)
+        self.human_player.on_move_completed.subscribe(self.on_move_completed)
         
         # Initialize game state
         self.winner = None
@@ -52,7 +52,7 @@ class GameManager:
         self.grid = self.grid_digitizer.capture_grid_state()
         self.grid_digitizer.display_grid_state()
         
-        winner = self.grid.check_winner()
+        winner = self.grid.check_for_winner()
         if winner:
             self.on_winner_detected(winner)
             return
