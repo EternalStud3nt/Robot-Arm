@@ -39,9 +39,4 @@ class Motor:
         pulse = conversions.angle_to_pulse(target_rotation)
         self.pwm.setServoPulse(self.channel, pulse)
         self.rotation = target_rotation
-        
-    
-    def rotate(self, delta_angle):
-        new_angle = self.rotation + delta_angle
-        self.set_rotation_smooth(new_angle)
 
