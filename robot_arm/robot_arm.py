@@ -9,9 +9,16 @@ class RobotArm:
         pwm.setPWMFreq(50)
         
         self.base_motor = Motor(0, pwm) # base motor
-        self.shoulder_motor = Motor(4, pwm) # height arm motor
-        self.elbow_motor = Motor(8, pwm) # depth arm motor
+        self.shoulder_motor = Motor(4, pwm) # shoulder arm motor
+        self.elbow_motor = Motor(8, pwm) # elbow arm motor
         self.claw_motor = Motor(12, pwm) # claw motor
+        
+        self.motors = {
+            "base": self.base_motor,
+            "elbow": self.elbow_motor,
+            "shoulder": self.shoulder_motor,
+            "claw": self.claw_motor
+        }
         
         self.max_s_motor_rotation = 170
         self.max_e_motor_rotation = 110
@@ -19,20 +26,14 @@ class RobotArm:
         self.min_s_motor_rotation = 5
         self.min_grip = 8
         
-        self.motors = {
-            "base": self.base_motor,
-            "depth": self.elbow_motor,
-            "height": self.shoulder_motor,
-            "claw": self.claw_motor
-        }
-        
         self.l_s = 8
         self.rotation = 0
         self.depth = 8
         self.height = 8
         self.grip = 90
         self.reset()
-      
+        
+    # region Set methods
     def set_motor_rotation(self, motor_id, angle):
         self.motors[motor_id].set_rotation_smooth(angle)
            
@@ -45,7 +46,7 @@ class RobotArm:
             self.base_motor.set_rotation_smooth(theta_b)
         
         self.rotation = angle      
-        
+    
     def set_depth(self, depth):
         if(depth > 15 or depth < 4 or self.height > 15 or self.height < -5):
             return
@@ -134,7 +135,9 @@ class RobotArm:
             self.claw_motor.set_rotation_smooth(angle)
             self.grip = grip
             print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
-
+    # endregion
+    
+    # region Move methods
     def rotate_vertically(self, delta_angle):
             self.set_vertical_rotation(self.rotation + delta_angle)
         
@@ -146,7 +149,8 @@ class RobotArm:
         
     def change_grip(self, delta_grip):
         self.set_grip(self.grip + delta_grip)
-               
+    # endregion
+    
     def reset(self):
         self.set_depth(4)
         self.set_height(8)
