@@ -1,7 +1,6 @@
 from robot_arm.motor import Motor
 from robot_arm.PCA9685 import PCA9685
 import math
-import time
 
 
 class RobotArm:
@@ -10,161 +9,148 @@ class RobotArm:
         pwm.setPWMFreq(50)
         
         self.base_motor = Motor(0, pwm) # base motor
-        self.height_motor = Motor(4, pwm) # height arm motor
-        self.depth_motor = Motor(8, pwm) # depth arm motor
+        self.shoulder_motor = Motor(4, pwm) # height arm motor
+        self.elbow_motor = Motor(8, pwm) # depth arm motor
         self.claw_motor = Motor(12, pwm) # claw motor
         
-        self.max_d_motor_rotation = 170
-        self.max_h_motor_rotation = 110
-        self.min_h_motor_rotation = 10
-        self.min_d_motor_rotation = 5
+        self.max_s_motor_rotation = 170
+        self.max_e_motor_rotation = 110
+        self.min_e_motor_rotation = 10
+        self.min_s_motor_rotation = 5
         self.min_grip = 8
         
         self.motors = {
             "base": self.base_motor,
-            "depth": self.depth_motor,
-            "height": self.height_motor,
+            "depth": self.elbow_motor,
+            "height": self.shoulder_motor,
             "claw": self.claw_motor
         }
         
-        self.l1 = 8
+        self.l_s = 8
         self.rotation = 0
         self.depth = 8
         self.height = 8
         self.grip = 90
         self.reset()
-        
-    def set_rotation_xz(self, angle):
-        new_angle = angle + 90
-        
-        if not(new_angle >= 0 and new_angle <= 180):
-            return
-        
-        self.base_motor.set_rotation_smooth(angle + 90)
-        self.rotation = angle
-        print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
-        
-    def rotate_by_xz(self, angle):
-        self.set_rotation_xz(self.rotation + angle)
-        
+      
     def set_motor_rotation(self, motor_id, angle):
         self.motors[motor_id].set_rotation_smooth(angle)
+           
+    def set_vertical_rotation(self, angle):
+        theta_b = angle + 90
+        
+        if not(theta_b >= 0 and theta_b <= 180):
+            return
+        else:
+            self.base_motor.set_rotation_smooth(theta_b)
+        
+        self.rotation = angle      
         
     def set_depth(self, depth):
         if(depth > 15 or depth < 4 or self.height > 15 or self.height < -5):
             return
         
+        # try-catch block to handle math domain error
         try:
-            h = self.height
-            d = depth
+            y = self.height
+            l_xz = depth
+            l = math.sqrt(y**2 + l_xz**2)
             
-            l = math.sqrt(h**2 + d**2)
-            
-            # theoritical angles in radians
-            theta = math.atan(h/d)
-            phi = math.acos((l/2)/self.l1)
-            a1 = theta + phi
-            a2 = theta - phi
+            theta = math.atan(y/l_xz)
+            omega = math.acos((l/2)/self.l_s)
+            theta_1 = theta + omega
+            theta_2 = theta - omega
         except:
             print("It's not possible to reach that depth")
             return
         
-        theta_depth = math.pi - a1
-        theta_height = math.pi/2 + a2
+        theta_s = math.pi - theta_1
+        theta_e = math.pi/2 + theta_2
         
-        theta_depth_deg = math.degrees(theta_depth)
-        theta_height_deg = math.degrees(theta_height)
+        theta_s_deg = math.degrees(theta_s)
+        theta_e_deg = math.degrees(theta_e)
         
         
-        
-        if(theta_depth_deg < self.min_d_motor_rotation or theta_depth_deg > self.max_d_motor_rotation):
+        # check if the angles are within the range of motor rotation
+        if(theta_s_deg < self.min_s_motor_rotation or theta_s_deg > self.max_s_motor_rotation):
             print("Impossible to reach that position")
             return
-        elif(theta_height_deg < self.min_h_motor_rotation or theta_height_deg > self.max_h_motor_rotation):
+        elif(theta_e_deg < self.min_e_motor_rotation or theta_e_deg > self.max_e_motor_rotation):
             print("Impossible to reach that position")
             return
         
-        self.depth_motor.set_rotation_smooth(theta_depth_deg)
-        self.height_motor.set_rotation_smooth(theta_height_deg)
+        self.elbow_motor.set_rotation_smooth(theta_s_deg)
+        self.shoulder_motor.set_rotation_smooth(theta_e_deg)
         
         
         self.depth = depth
         print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
 
-    def move_forwards(self, distance):
-        self.set_depth(self.depth + distance)
-        
     def set_height(self, height):
         if(self.depth > 15 or self.depth < 4 or height > 15 or height < -5):
             return
         
+         # try-catch block to handle math domain error
         try:
-            h = height
-            d = self.depth
+            y = height
+            l_xz = self.depth
+            l = math.sqrt(y**2 + l_xz**2)
             
-            l = math.sqrt(h**2 + d**2)
+            theta = math.atan(y/l_xz)
+            omega = math.acos((l/2)/self.l_s)
             
-            # theoritical angles in radians
-            theta = math.atan(h/d)
-            phi = math.acos((l/2)/self.l1)
-            a1 = theta + phi
-            a2 = theta - phi
+            theta_1 = theta + omega
+            theta_2 = theta - omega
         except:
             print("It's not possible to reach that height")
             return
         
-        theta_depth = math.pi - a1
-        theta_height = math.pi/2 + a2
+        theta_e = math.pi/2 + theta_2
+        theta_s = math.pi - theta_1
         
-        theta_depth_deg = math.degrees(theta_depth)
-        theta_height_deg = math.degrees(theta_height)
+        theta_e_deg = math.degrees(theta_e)
+        theta_s_deg = math.degrees(theta_s)
         
-        
-        
-        if(theta_depth_deg < self.min_d_motor_rotation or theta_depth_deg > self.max_d_motor_rotation):
+        # check if the angles are within the range of motor rotation
+        if(theta_e_deg < self.min_s_motor_rotation or theta_e_deg > self.max_s_motor_rotation):
             print("Impossible to reach that position")
             return
-        elif(theta_height_deg < self.min_h_motor_rotation or theta_height_deg > self.max_h_motor_rotation):
+        elif(theta_s_deg < self.min_e_motor_rotation or theta_s_deg > self.max_e_motor_rotation):
             print("Impossible to reach that position")
             return
         
-        self.depth_motor.set_rotation_smooth(theta_depth_deg)
-        self.height_motor.set_rotation_smooth(theta_height_deg)
+        self.elbow_motor.set_rotation_smooth(theta_e_deg)
+        self.shoulder_motor.set_rotation_smooth(theta_s_deg)
         
+        # update height
         self.height = height
         print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
+    
+    def set_grip(self, grip):
+            if grip < self.min_grip: grip = self.min_grip
+            elif grip > 90: grip = 90
+            
+            angle = grip * 180 / 100
+            self.claw_motor.set_rotation_smooth(angle)
+            self.grip = grip
+            print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
+
+    def rotate_vertically(self, delta_angle):
+            self.set_vertical_rotation(self.rotation + delta_angle)
+        
+    def move_forwards(self, distance):
+        self.set_depth(self.depth + distance)
 
     def move_upwards(self, distance):
         self.set_height(self.height + distance)
-
-    def get_position(self):
-        x = self.depth * math.sin(math.radians(self.rotation))
-        z = self.depth * math.cos(math.radians(self.rotation))
-        y = self.height
-        return (x, y, z)
-
-    def set_depth_and_height(self, depth, height):
-        self.height = height
-        self.set_depth(depth)
-    
-    def set_position(self, depth, height, rotation):
-        self.set_depth_and_height(depth, height)
-        self.set_rotation_xz(rotation)
-        
-    def set_grip(self, grip):
-        if grip < self.min_grip: grip = self.min_grip
-        elif grip > 90: grip = 90
-        
-        angle = grip * 180 / 100
-        self.claw_motor.set_rotation_smooth(angle)
-        self.grip = grip
-        print(f"Current depth: {self.depth}, height: {self.height}, base rotation: {self.rotation}, grip: {self.grip}")
         
     def change_grip(self, delta_grip):
         self.set_grip(self.grip + delta_grip)
                
     def reset(self):
-        self.set_position(4, 8, 0)
+        self.set_depth(4)
+        self.set_height(8)
+        self.set_vertical_rotation(0)
         
 if __name__ == "__main__":
     arm = RobotArm()
@@ -181,5 +167,3 @@ if __name__ == "__main__":
             continue
         
         arm.set_motor_rotation(motor_channel, degrees)
-        
-        
