@@ -27,7 +27,7 @@ class ImageProcessor:
         
         return objects
 
-    def filter_objects_by_name(self, name, objects):
+    def filter_objects_by_label(self, name, objects):
         """
         Filters the detected objects by the given name.
         """

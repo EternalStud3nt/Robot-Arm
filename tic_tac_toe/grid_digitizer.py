@@ -33,7 +33,7 @@ class GridDigitizer:
         objects = self.image_processor.detect_objects(frame)
         
         # Detect grid area
-        cells = self.image_processor.filter_objects_by_name("Cell", objects)
+        cells = self.image_processor.filter_objects_by_label("Cell", objects)
         grid_area = self.image_processor.detect_grid_area(cells)
         
         self.grid_area = grid_area
