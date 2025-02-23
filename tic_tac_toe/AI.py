@@ -70,7 +70,6 @@ class AI(Player):
         self.reset_arm_position()
         time.sleep(0.5)
         
-
     def reset_arm_position(self):
         self.arm.set_position(8, 8, 90)
         
