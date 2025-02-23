@@ -96,7 +96,7 @@ class ImageProcessor:
         cv2.putText(frame, f"{label}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
         return frame
 
-    def draw_objects(self, frame, objects):
+    def draw_objects_in_frame(self, frame, objects):
         if not objects:
             return frame
         
@@ -136,5 +136,5 @@ class ImageProcessor:
 
     def draw_grid_and_objects(self, frame, grid_area, objects):
         frame_with_grid = self.draw_grid(frame, grid_area)
-        frame_with_objects = self.draw_objects(frame_with_grid, objects)
+        frame_with_objects = self.draw_objects_in_frame(frame_with_grid, objects)
         return frame_with_objects

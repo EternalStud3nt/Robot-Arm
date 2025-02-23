@@ -82,11 +82,11 @@ class GridDigitizer:
                     obj_col = (center[0] - self.grid_area[0][0]) // cell_width
                     grid_elements[obj_row][obj_col] = obj[0]
                 
-            self.grid.set_objects(grid_elements)
+            self.grid.set_rows(grid_elements)
             
         return self.grid
 
     def display_grid_state(self):
-        for row in self.grid.elements:
+        for row in self.grid.rows:
             print(' | '.join(row))
             print('-' * 10)

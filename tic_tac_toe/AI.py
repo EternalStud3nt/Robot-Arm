@@ -38,7 +38,7 @@ class AI(Player):
                     elements = [r[:] for r in grid.elements]
                     elements[row][col] = symbol
                     new_grid = Grid()
-                    new_grid.set_objects(elements)
+                    new_grid.set_rows(elements)
                     if new_grid.check_for_winner():
                         return row, col
         
@@ -49,7 +49,7 @@ class AI(Player):
                     elements = [r[:] for r in grid.elements]
                     elements[row][col] = opponent_symbol
                     new_grid = Grid()
-                    new_grid.set_objects(elements)
+                    new_grid.set_rows(elements)
                     if new_grid.check_for_winner():
                         return row, col
         

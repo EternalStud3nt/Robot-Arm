@@ -2,9 +2,6 @@ from tic_tac_toe.grid import Grid
 from tic_tac_toe.AI import AI
 from tic_tac_toe.human_player import HumanPlayer
 from input.event import Event
-from computer_vision.image_processor import ImageProcessor
-import cv2
-from computer_vision.camera import Camera
 from tic_tac_toe.grid_digitizer import GridDigitizer
 
 class GameManager:
