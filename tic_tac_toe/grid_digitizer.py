@@ -10,11 +10,11 @@ class GridDigitizer:
         self.grid_area = None
         self.grid = Grid()
         
-    def display_detections(self, frame, grid_detections):
+    def display_detections(self, frame, grid_objects):
         frame = frame.copy()        
             
         # Draw the grid and objects on the processed frame
-        processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, grid_detections)
+        processed_frame = self.image_processor.draw_grid_and_objects(frame, self.grid_area, grid_objects)
         
         cv2.imshow("Grid State", processed_frame)
         cv2.waitKey(2000)  # Display for 2000 milliseconds (2 seconds)
@@ -34,8 +34,9 @@ class GridDigitizer:
         # Detect grid area
         cells = self.image_processor.filter_objects_by_label("Cell", objects)
         grid_area = self.image_processor.detect_grid_area(cells)
-        
+
         self.grid_area = grid_area
+        
         grid_detections = self.image_processor.filter_objects_within_grid(objects, self.grid_area)
         self.display_detections(frame, grid_detections)
         print("Grid area captured successfully.")
@@ -63,8 +64,8 @@ class GridDigitizer:
             
             return grid_objects
         
-        detected_objects = capture_objects_in_grid_area()
-        if detected_objects is None:
+        grid_objects = capture_objects_in_grid_area()
+        if grid_objects is None:
             return None
         else:
             grid_width = self.grid_area[1][0] - self.grid_area[0][0]
@@ -72,16 +73,16 @@ class GridDigitizer:
             cell_width = grid_width // 3
             cell_height = grid_height // 3
             
-            grid_elements = [[' ' for _ in range(3)] for _ in range(3)]
-            for obj in detected_objects:
+            grid_rows = [[' ' for _ in range(3)] for _ in range(3)]
+            for obj in grid_objects:
                 if(obj[0] == "X" or obj[0] == "O"):
                     x1, y1, x2, y2 = obj[1]
                     center = ((x1 + x2) // 2, (y1 + y2) // 2)
                     obj_row = (center[1] - self.grid_area[0][1]) // cell_height
                     obj_col = (center[0] - self.grid_area[0][0]) // cell_width
-                    grid_elements[obj_row][obj_col] = obj[0]
+                    grid_rows[obj_row][obj_col] = obj[0]
                 
-            self.grid.set_rows(grid_elements)
+            self.grid.set_rows(grid_rows)
             
         return self.grid
 
