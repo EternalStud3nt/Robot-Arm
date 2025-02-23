@@ -1,7 +1,6 @@
 from computer_vision.image_processor import ImageProcessor
 from computer_vision.camera import Camera
 from tic_tac_toe.grid import Grid
-from threading import Thread
 import cv2
 
 class GridDigitizer:
