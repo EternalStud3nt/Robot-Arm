@@ -1,4 +1,3 @@
-from tic_tac_toe.grid import Grid
 from input.event import Event
 
 class Player:

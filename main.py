@@ -25,8 +25,6 @@ def control_robot():
             arm.set_position(depth, height, rotation)
 
 def debug_grab_coordinates():
-    from tic_tac_toe.AI import AI
-    from tic_tac_toe.grid import Grid
     from tic_tac_toe.game_manager import GameManager
 
     game_manager = GameManager()
