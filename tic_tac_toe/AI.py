@@ -34,8 +34,8 @@ class AI(Player):
         # Check if AI can win in the next move
         for row in range(3):
             for col in range(3):
-                if grid.elements[row][col] == ' ':
-                    elements = [r[:] for r in grid.elements]
+                if grid.rows[row][col] == ' ':
+                    elements = [r[:] for r in grid.rows]
                     elements[row][col] = symbol
                     new_grid = Grid()
                     new_grid.set_rows(elements)
@@ -45,8 +45,8 @@ class AI(Player):
         # Check if opponent can win in the next move and block them
         for row in range(3):
             for col in range(3):
-                if grid.elements[row][col] == ' ':
-                    elements = [r[:] for r in grid.elements]
+                if grid.rows[row][col] == ' ':
+                    elements = [r[:] for r in grid.rows]
                     elements[row][col] = opponent_symbol
                     new_grid = Grid()
                     new_grid.set_rows(elements)
@@ -54,7 +54,7 @@ class AI(Player):
                         return row, col
         
         # Place symbol in a random available cell
-        available_moves = [(row, col) for row in range(3) for col in range(3) if grid.elements[row][col] == ' ']
+        available_moves = [(row, col) for row in range(3) for col in range(3) if grid.rows[row][col] == ' ']
         return random.choice(available_moves)
         
     def place_object_to_grid(self, row, col):

@@ -132,9 +132,11 @@ class ImageProcessor:
         alpha = 0.05  # Transparency factor.
         cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
         cv2.rectangle(frame, top_left, bottom_right, (0, 255, 255), 2)
+        cv2.imwrite('/home/ellab/Documents/Robot-Arm/computer_vision/grid_detection.jpg', frame)
         return frame
 
     def draw_grid_and_objects(self, frame, grid_area, objects):
         frame_with_grid = self.draw_grid(frame, grid_area)
         frame_with_objects = self.draw_objects_in_frame(frame_with_grid, objects)
+        cv2.imwrite('/home/ellab/Documents/Robot-Arm/computer_vision/last_detection.jpg', frame_with_objects)
         return frame_with_objects

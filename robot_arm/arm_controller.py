@@ -58,10 +58,11 @@ class ArmController:
                                             
 if __name__ == "__main__":
     controller = ArmController()
-#      robot.reset()
-#     while True:
-#         channel = input("input channel:  ")
-#         angle = input("input angle: ")
-#         angle = int(angle)
-#         robot.set_motor_rotation(channel, angle)
+    robot = RobotArm()
+    robot.reset()
+    while True:
+        channel = input("input channel:  ")
+        angle = input("input angle: ")
+        angle = int(angle)
+        robot.set_motor_rotation(channel, angle)
                                

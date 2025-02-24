@@ -149,8 +149,13 @@ class RobotArm:
         
     def change_grip(self, delta_grip):
         self.set_grip(self.grip + delta_grip)
-    # endregion
+    # endregion        
     
+    def set_position(self, depth, height, rotation):
+        self.height = height
+        self.set_depth(depth)
+        self.set_vertical_rotation(rotation)
+
     def reset(self):
         self.set_depth(4)
         self.set_height(8)
