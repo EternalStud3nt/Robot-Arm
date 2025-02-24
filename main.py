@@ -57,8 +57,6 @@ def test_grid_digitizer():
             print("Invalid input. Please try again.")
 
 def execute_game_loop():
-    from tic_tac_toe.grid_digitizer import GridDigitizer
-    from tic_tac_toe.grid import Grid
     from tic_tac_toe.game_manager import GameManager
 
     game_manager = GameManager()
@@ -66,7 +64,6 @@ def execute_game_loop():
 
 def main():
     execute_game_loop()
-    
     
 if __name__ == "__main__":
     main()

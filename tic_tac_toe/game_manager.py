@@ -13,9 +13,6 @@ class GameManager:
         self.grid.on_turn_end.subscribe(self.on_move_completed)
         self.grid.on_winner_detected.subscribe(self.on_winner_detected)
         
-        # Create event for move requests
-        self.on_move_requested = Event()
-        
         # Define player symbols
         self.human_player_symbol = 'X'
         self.bot_player_symbol = 'O'
